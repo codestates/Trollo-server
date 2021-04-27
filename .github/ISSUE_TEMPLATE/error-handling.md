@@ -1,6 +1,6 @@
 ---
 name: Error Handling
-about: 프로젝트에서 만난 에러를 어떻게 해결했는지 기록하는 templete입니다
+about: 프로젝트에서 만난 에러를 어떻게 해결했는지 기록하는 template입니다
 title: "[기능] 설명"
 labels: ''
 assignees: ''
