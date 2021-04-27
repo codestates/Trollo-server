@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-
+import './init/mongo'
+import "dotenv/config";
+import devRouter from './routes/dev'
 class App {
   public application: express.Application;
 
@@ -24,7 +26,9 @@ const corsOption = {
   credentials: true
 }
 
+app.use(express.json())
 app.use(cors(corsOption));
+app.use('/',devRouter)
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
