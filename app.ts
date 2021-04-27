@@ -17,8 +17,15 @@ class App {
 }
 
 const app = new App().application;
-app.use(cors());
+
+const corsOption = {
+  origin: true,
+  method: ['post','get','delete','options'],
+  credentials: true
+}
+
+app.use(cors(corsOption));
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
-export default App;
+export default app;
