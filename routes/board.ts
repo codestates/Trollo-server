@@ -1,16 +1,17 @@
 import app from '../app'
+import { boardController } from '../controller/board';
 
-// 보드정보 다 요청 (목록 만들때 사용)
-app.get('/board') // 컨트롤러 추가
+// 게시판 글 목록 데이터 보내주기
+app.get('/board', boardController.boardAll);
 
-// 특정 게시글 정보 요청
-app.get('/board/:id') // 컨트롤러 추가
+// 게시글 상세 내용 + 댓글 데이터 보내주기
+app.get('/board/:id', boardController.boardOne);
 
-// 게시글 삭제요청
-app.delete('/board/:id') // 컨트롤러 추가
+// 게시글 삭제하기
+app.delete('/board/:id', boardController.boardDelete);
 
-// 댓글추가
-app.post('/board/comment') // 컨트롤러 추가
+// 댓글 추가하기
+app.post('/board/comment', boardController.commentAdd);
 
-// 댓글삭제
-app.delete('/board/:id/:commentId') // 컨트롤러 추가
+// 댓글 삭제하기
+app.delete('/board/:id/:commentId', boardController.commentDelete);
