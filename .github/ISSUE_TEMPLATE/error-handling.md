@@ -1,14 +1,11 @@
 ---
 name: Error Handling
 about: 프로젝트에서 만난 에러를 어떻게 해결했는지 기록하는 template입니다
-title: "[기능] 설명"
-labels: ''
+title: "[❗️Error Handling] [마일스톤] 설명"
+labels: Error Handling
 assignees: ''
 
 ---
-
-> 해결된 에러라면 라벨에 'Complete' 를 달아주세요.
-> 미해결된 에러라면 라벨을 'In progress' 로 변경해주세요.
 
 ### 어떤 에러인가요?
 - 
