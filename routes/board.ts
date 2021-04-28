@@ -1,4 +1,4 @@
-import app from '../app'
+import app from '../app';
 import { boardController } from '../controller/board';
 
 // 게시판 글 목록 데이터 보내주기

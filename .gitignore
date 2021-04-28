@@ -139,7 +139,7 @@ __test__/review.json
 .circleci/results.json
 
 # prettier
-.prettierrc
+# .prettierrc
 
 
 config/youtube.js
