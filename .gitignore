@@ -143,3 +143,5 @@ __test__/review.json
 
 
 config/youtube.js
+
+.env
