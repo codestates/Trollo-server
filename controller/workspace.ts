@@ -1,10 +1,10 @@
-import express from 'express';
+import { Request, Response } from 'express';
 
 const workspaceController = {
-	get: (req: express.Request, res: express.Response) => {
+	get: (req: Request, res: Response) => {
 		// workspace(칸반보드) 데이터 보내주기
 	},
-	post: (req: express.Request, res: express.Response) => {
+	post: (req: Request, res: Response) => {
 		// 생성, 수정, 삭제된 workspace(칸반보드) 데이터 저장하기
 	},
 };

@@ -6,6 +6,7 @@ import { emailController } from '../Auth/nodemailer';
 import { emailAuthController } from '../controller/emailauth';
 import { authChecker } from '../middleware/authChecker';
 import { refreshTokenController } from '../controller/refresh';
+import { oauthController } from '../controller/loginOAuth';
 const devRouter = express.Router();
 
 //테스트용 라우트로 사용
@@ -22,4 +23,7 @@ devRouter.get('/refresh', refreshTokenController.refresh);
 devRouter.get('/my', authChecker, (req, res) => {
 	res.send('auth user');
 });
+devRouter.post('/loginOAuthGoogle', oauthController.google);
+devRouter.post('/loginOAuthGithub', oauthController.github);
+
 export default devRouter;
