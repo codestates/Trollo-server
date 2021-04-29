@@ -109,7 +109,7 @@ export const emailController = async (req: Request, res: Response) => {
                               <tbody><tr><td align="center">
                                     <div>
                                       <a href=${
-																				'http://localhost:3000/emailauth?authorizationCode=' +
+																				'http://localhost:4000/emailauth?authorizationCode=' +
 																				AuthorizationCode +
 																				'&email=' +
 																				email
@@ -124,12 +124,12 @@ export const emailController = async (req: Request, res: Response) => {
                             </p>
                             <p style="                      color: #000;                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',                        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',                        'Droid Sans', 'Helvetica Neue', sans-serif;                      font-size: 14px;                      line-height: 24px;                    ">
                               <a href="${
-																'http://localhost:3000/emailauth?authorizationCode=' +
+																'http://localhost:4000/emailauth?authorizationCode=' +
 																AuthorizationCode +
 																'&email=' +
 																email
 															}" style="color: #067df7; text-decoration: none;" target="_blank" rel="noreferrer noopener">
-															${'http://localhost:3000/emailauth?authorizationCode=' + AuthorizationCode + '&email=' + email}
+															${'http://localhost:4000/emailauth?authorizationCode=' + AuthorizationCode + '&email=' + email}
                               </a>
                             </p>
                             <br>

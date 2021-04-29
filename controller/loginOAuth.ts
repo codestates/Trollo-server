@@ -82,7 +82,10 @@ const oauthController = {
 							authorization: `Bearer ${accessToken}`, //`token ${accessToken}`,
 						},
 					})
-					.then(result => result.data.login)
+					.then(result => {
+						console.log('result.data - ', result.data);
+						return result.data.login;
+					})
 					.catch(err => {
 						console.log(err.message);
 					});
