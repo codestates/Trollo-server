@@ -5,7 +5,6 @@ import controller from '../controller/comment';
 import { emailController } from '../Auth/nodemailer';
 import { emailAuthController } from '../controller/emailauth';
 import { authChecker } from '../middleware/authChecker';
-import { refreshTokenController } from '../controller/refresh';
 import { oauthController } from '../controller/loginOAuth';
 const devRouter = express.Router();
 
