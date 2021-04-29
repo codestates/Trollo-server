@@ -22,6 +22,7 @@ class App {
 const app = new App().application;
 
 const corsOption = {
+	Headers: { 'content-type': 'application/json' },
 	origin: true,
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
