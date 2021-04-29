@@ -25,8 +25,9 @@ export const authChecker = (req: Request, res: Response, next: NextFunction) => 
 						async (err: VerifyErrors | null, decoded: any | undefined) => {
 							if (err) {
 								//리프레시토큰 정상적이지않음,
-								res.redirect('http://trollo.s3-website.ap-northeast-2.amazonaws.com/Login');
+								res.redirect(`${process.env.CLIENT_URL}/Login`);
 							} else {
+								// 액세스토큰 새로 발급
 								const id = decoded.userId;
 								const email = decoded.email;
 								const newAccessToken = await accessTokenGenerator(id, email);
@@ -35,15 +36,16 @@ export const authChecker = (req: Request, res: Response, next: NextFunction) => 
 						},
 					);
 				} else {
-					//없음
-					res.redirect('http://trollo.s3-website.ap-northeast-2.amazonaws.com/Login');
+					//리프레시 없음
+					res.redirect(`${process.env.CLIENT_URL}/Login`);
 				}
 			} else {
+				// 액세스토큰 이상없음 다음꺼로 넘어감
 				next();
 			}
 		});
 	} else {
-		// 토큰 없을때
-		res.redirect('http://localhost:4000/refresh');
+		// 액세스 토큰 없을때
+		res.redirect(`${process.env.CLIENT_URL}/Login`);
 	}
 };

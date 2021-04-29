@@ -16,7 +16,7 @@ const oauthController = {
 				client_id: process.env.GOOGLE_CLIENT_ID,
 				client_secret: process.env.GOOGLE_CLIENT_SECRET,
 				code: req.body.authorizationCode,
-				redirect_uri: 'http://localhost:3000', // 클라이언트 리디렉션 uri - 나중에 수정해야함
+				redirect_uri: process.env.CLIENT_URL, // 클라이언트 리디렉션 uri - 나중에 수정해야함
 				grant_type: 'authorization_code',
 			})
 			.then(async result => {
