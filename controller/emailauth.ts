@@ -36,7 +36,7 @@ const emailAuthController = {
 							const refreshToken = await refreshTokenGenerator(id, email);
 							console.log('at: ', accessToken, ', rt: ', refreshToken);
 							res.cookie('refreshToken', refreshToken as string, {
-								maxAge: 900000,
+								maxAge: 1000 * 60 * 60 * 24 * 7,
 								httpOnly: true,
 								// secure: true,
 								// sameOrigin: 'none',
