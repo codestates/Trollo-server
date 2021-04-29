@@ -19,7 +19,6 @@ devRouter.get('/test', (req: express.Request, res: express.Response) => {
 devRouter.post('/test', controller.commentCreate);
 devRouter.get('/mail', emailController);
 devRouter.get('/emailauth', emailAuthController.authorizationCode);
-devRouter.get('/refresh', refreshTokenController.refresh);
 devRouter.get('/my', authChecker, (req, res) => {
 	res.send('auth user');
 });

@@ -27,7 +27,10 @@ export const authChecker = (req: Request, res: Response, next: NextFunction) => 
 								//리프레시토큰 정상적이지않음,
 								res.redirect('http://trollo.s3-website.ap-northeast-2.amazonaws.com/Login');
 							} else {
-								res.redirect('http://localhost:4000/refresh');
+								const id = decoded.userId;
+								const email = decoded.email;
+								const newAccessToken = await accessTokenGenerator(id, email);
+								res.send({ message: 'newAccessToken', data: { accessToken: newAccessToken } });
 							}
 						},
 					);
