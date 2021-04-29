@@ -123,8 +123,13 @@ export const emailController = async (req: Request, res: Response) => {
                               Or copy and paste this URL into a new tab of your browser:
                             </p>
                             <p style="                      color: #000;                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',                        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',                        'Droid Sans', 'Helvetica Neue', sans-serif;                      font-size: 14px;                      line-height: 24px;                    ">
-                              <a href="${'http://www.google.com'}" style="color: #067df7; text-decoration: none;" target="_blank" rel="noreferrer noopener">
-                                ${AuthorizationCode}
+                              <a href="${
+																'http://localhost:3000/emailauth?authorizationCode=' +
+																AuthorizationCode +
+																'&email=' +
+																email
+															}" style="color: #067df7; text-decoration: none;" target="_blank" rel="noreferrer noopener">
+															${'http://localhost:3000/emailauth?authorizationCode=' + AuthorizationCode + '&email=' + email}
                               </a>
                             </p>
                             <br>
