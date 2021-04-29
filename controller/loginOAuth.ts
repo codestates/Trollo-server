@@ -38,7 +38,7 @@ const oauthController = {
 						email: resInfo,
 					},
 				});
-				if (userInfo !== undefined) {
+				if (userInfo == null && userInfo !== undefined) {
 					await Users.create({
 						email: resInfo,
 					});
@@ -55,7 +55,6 @@ const oauthController = {
 			});
 	},
 	github: async (req: Request, res: Response) => {
-		console.log('💚check github', req.body);
 		//로그인 - OAuth 방식: github
 		const githubLoginURL = 'https://github.com/login/oauth/access_token';
 		const githubInfoURL = 'https://api.github.com/user';
@@ -93,7 +92,7 @@ const oauthController = {
 						email: `${resInfo}@github.com`,
 					},
 				});
-				if (userInfo !== undefined) {
+				if (userInfo == null && userInfo !== undefined) {
 					await Users.create({
 						email: `${resInfo}@github.com`,
 					});

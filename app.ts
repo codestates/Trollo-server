@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(cors(corsOption));
 app.use('/', devRouter);
-app.listen(3000, () => {
-	console.log('Server listening on port 3000');
+app.listen(4000, () => {
+	console.log('Server listening on port 4000');
 });
 export default app;
