@@ -16,14 +16,16 @@ import { sequelize } from './index';
 import { Users } from './user';
 import { Tasks } from './task';
 
-interface WorkspaceAttributes {
+export interface WorkspaceAttributes {
 	title: string;
 	user_id: number;
+	index: number;
 }
 
 export class Workspaces extends Model<WorkspaceAttributes> {
 	public title!: string;
 	public user_id!: number;
+	public index!: number;
 	static associations: {
 		// WorkspaceBelongsToTask: Association<Workspaces, Tasks>;
 		// define association here
@@ -33,6 +35,7 @@ Workspaces.init(
 	{
 		title: DataTypes.STRING,
 		user_id: DataTypes.INTEGER,
+		index: DataTypes.INTEGER,
 	},
 	{
 		sequelize,

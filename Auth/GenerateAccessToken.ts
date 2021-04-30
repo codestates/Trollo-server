@@ -9,8 +9,8 @@ export async function accessTokenGenerator(id: number, email: string) {
 			userId: id,
 			email: email,
 			iat: Math.floor(Date.now() / 1000),
-			// exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // 2시간
-			exp: Math.floor(Date.now() / 1000) + 60 * 5, // 5분 테스트용
+			exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // 2시간
+			// exp: Math.floor(Date.now() / 1000) + 60 * 5, // 5분 테스트용
 		},
 		process.env.ACCESS_SECRET,
 		// (err: Error | null, encoded: string | undefined) => {
