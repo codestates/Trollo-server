@@ -5,6 +5,7 @@ dotenv.config();
 import { Users } from '../src/db/models/user';
 import { accessTokenGenerator } from '../Auth/GenerateAccessToken';
 import { refreshTokenGenerator } from '../Auth/GenerateRefreshToken';
+const url = require('url');
 // const Users = require('../src/db/models/user');
 
 const emailAuthController = {
@@ -41,7 +42,19 @@ const emailAuthController = {
 								// secure: true,
 								// sameOrigin: 'none',
 							});
-							res.status(200).send({ message: 'ok', data: { accessToken: accessToken } });
+							res.redirect(
+								url.format({
+									pathname: 'http://9351eda07173.ngrok.io/',
+									query: {
+										accessToken: accessToken,
+									},
+								}),
+							);
+							// res.redirect('/?' + query);
+							// 	res
+							// 		.status(200).
+							// 		.write({ message: 'ok', data: { accessToken: accessToken } })
+							// 		.redirect('http://9351eda07173.ngrok.io/');
 						} else {
 							//expired
 							res.status(404).send({ message: 'authorizationCode Expired!' });

@@ -14,7 +14,7 @@ class App {
 
 	private router(): void {
 		this.application.get('/', (req: express.Request, res: express.Response) => {
-			res.send('hello! world!');
+			res.send('Hello World!');
 		});
 	}
 }
