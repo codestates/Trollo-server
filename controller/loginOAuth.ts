@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-//const jwt = require('jsonwebtoken');
 import * as dotenv from 'dotenv';
 dotenv.config();
 import { Users } from '../src/db/models/user';
@@ -16,11 +15,12 @@ const oauthController = {
 				client_id: process.env.GOOGLE_CLIENT_ID,
 				client_secret: process.env.GOOGLE_CLIENT_SECRET,
 				code: req.body.authorizationCode,
-				redirect_uri: process.env.CLIENT_URL, // 클라이언트 리디렉션 uri - 나중에 수정해야함
+				redirect_uri: process.env.CLIENT_URL,
 				grant_type: 'authorization_code',
 			})
 			.then(async result => {
 				let accessToken = result.data.access_token;
+				let refreshToken = result.data.refresh_token;
 				// accessToken을 통해 로그인한 유저 정보 가져오기
 				const resInfo = await axios
 					.get(googleInfoURL, {
@@ -38,19 +38,26 @@ const oauthController = {
 						email: resInfo,
 					},
 				});
-				if (userInfo == null && userInfo !== undefined) {
+				if (userInfo == null && resInfo !== undefined) {
 					await Users.create({
 						email: resInfo,
 					});
 				}
+				// cookie에 refresh token 저장
+				res.cookie('refreshToken', refreshToken, {
+					maxAge: 1000 * 60 * 60 * 24 * 7,
+					httpOnly: true,
+				});
+				// access token과 loginType을 응답으로 보내줌
 				res.status(200).json({
 					accessToken,
+					LoginType: 'google',
 				});
 			})
 			.catch(err => {
 				console.log(err.message);
-				res.status(400).json({
-					message: 'login error',
+				res.status(401).json({
+					message: 'authorizationCode Error!',
 				});
 			});
 	},
@@ -79,7 +86,7 @@ const oauthController = {
 				const resInfo = await axios
 					.get(githubInfoURL, {
 						headers: {
-							authorization: `Bearer ${accessToken}`, //`token ${accessToken}`,
+							authorization: `Bearer ${accessToken}`,
 						},
 					})
 					.then(result => {
@@ -95,19 +102,21 @@ const oauthController = {
 						email: `${resInfo}@github.com`,
 					},
 				});
-				if (userInfo == null && userInfo !== undefined) {
+				if (userInfo == null && resInfo !== undefined) {
 					await Users.create({
 						email: `${resInfo}@github.com`,
 					});
 				}
+				// access token과 loginType을 응답으로 보내줌
 				res.status(200).json({
 					accessToken,
+					LoginType: 'github',
 				});
 			})
 			.catch(err => {
 				console.log(err.message);
-				res.status(400).json({
-					message: 'error',
+				res.status(401).json({
+					message: 'authorizationCode Error!',
 				});
 			});
 	},

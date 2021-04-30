@@ -14,7 +14,7 @@ class App {
 
 	private router(): void {
 		this.application.get('/', (req: express.Request, res: express.Response) => {
-			res.send('hello! world!');
+			res.send("hello! It's Trollo Server!");
 		});
 	}
 }
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors(corsOption));
-app.use('/', devRouter);
+app.use('/', devRouter); // 테스트용으로 바로 넘어감, 배포 전 삭제해야함!
 app.listen(4000, () => {
 	console.log('Server listening on port 4000');
 });
