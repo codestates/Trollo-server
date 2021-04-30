@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response } from 'express';
 const jwt = require('jsonwebtoken');
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -8,7 +8,7 @@ import { refreshTokenGenerator } from '../Auth/GenerateRefreshToken';
 // const Users = require('../src/db/models/user');
 
 const emailAuthController = {
-	authorizationCode: async (req: express.Request, res: express.Response) => {
+	authorizationCode: async (req: Request, res: Response) => {
 		//오소리코드 확인
 
 		// console.log(req.query);
@@ -41,14 +41,22 @@ const emailAuthController = {
 								// secure: true,
 								// sameOrigin: 'none',
 							});
-							res.status(200).send({ message: 'ok', data: { accessToken: accessToken } });
+							// access token과 loginType을 응답으로 보내줌
+							res.status(200).json({
+								accessToken,
+								LoginType: 'email',
+							});
 						} else {
 							//expired
-							res.status(404).send({ message: 'authorizationCode Expired!' });
+							res.status(403).json({
+								message: 'authorizationCode Expired!',
+							});
 						}
 					}
 				} catch (err) {
-					res.status(500).send({ message: 'authorizationCode Error!' });
+					res.status(401).json({
+						message: 'authorizationCode Error!',
+					});
 				}
 			},
 		);
