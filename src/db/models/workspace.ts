@@ -16,7 +16,7 @@ import { sequelize } from './index';
 import { Users } from './user';
 import { Tasks } from './task';
 
-interface WorkspaceAttributes {
+export interface WorkspaceAttributes {
 	title: string;
 	user_id: number;
 	index: number;
