@@ -20,6 +20,7 @@ interface TaskAttributes {
 	start_date: Date;
 	end_date: Date;
 	tasklist_id: number;
+	index: number;
 }
 
 export class Tasks extends Model<TaskAttributes> {
@@ -28,6 +29,7 @@ export class Tasks extends Model<TaskAttributes> {
 	public start_date!: Date;
 	public end_date!: Date;
 	public tasklist_id!: number;
+	public index!: number;
 	static associations: {
 		boardBelongsToUser: Association<Tasks, Workspaces>;
 		// define association here
@@ -40,6 +42,7 @@ Tasks.init(
 		start_date: DataTypes.DATE,
 		end_date: DataTypes.DATE,
 		tasklist_id: DataTypes.INTEGER,
+		index: DataTypes.INTEGER,
 	},
 	{
 		sequelize,
