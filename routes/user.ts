@@ -1,16 +1,22 @@
 import app from '../app';
+import express from 'express';
+import { emailController } from '../Auth/nodemailer';
+import { emailAuthController } from '../controller/emailauth';
 import { oauthController } from '../controller/loginOAuth';
 import { userController } from '../controller/user';
-
+const userRouter = express.Router();
 // 로그인
-app.post('/login', userController.login);
-
+userRouter.post('/login', userController.login);
+userRouter.post('/mail', emailController);
+userRouter.post('/emailauth', emailAuthController.authorizationCode);
 // 로그인 - OAuth 방식: google, github
-app.post('/loginOAuthGoogle', oauthController.google);
-app.post('/loginOAuthGithub', oauthController.github);
+userRouter.post('/loginOAuthGoogle', oauthController.google);
+userRouter.post('/loginOAuthGithub', oauthController.github);
 
 // 회원가입
-app.post('/register', userController.register);
+userRouter.post('/register', userController.register);
 
 // 로그아웃
-app.get('/logout', userController.logout);
+userRouter.get('/logout', userController.logout);
+
+export default userRouter;

@@ -21,7 +21,7 @@ devRouter.get('/axios', (req, res) => {
 });
 devRouter.post('/test', controller.commentCreate);
 devRouter.post('/mail', emailController);
-devRouter.get('/emailauth', emailAuthController.authorizationCode);
+devRouter.post('/emailauth', emailAuthController.authorizationCode);
 devRouter.options('/workspace', (req, res) => {
 	res.status(200).send({ message: 'options OK' });
 });

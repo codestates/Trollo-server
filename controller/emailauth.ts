@@ -13,8 +13,8 @@ const emailAuthController = {
 		//오소리코드 확인
 
 		// console.log(req.query);
-		const authorizationCode: string = (await req.query.authorizationCode) as string;
-		const email: string = (await req.query.email) as string;
+		const authorizationCode: string = (await req.body.authorizationCode) as string;
+		const email: string = (await req.body.email) as string;
 		// console.log(authorizationCode);
 		jwt.verify(
 			authorizationCode,
@@ -47,19 +47,16 @@ const emailAuthController = {
 							// 	accessToken,
 							// 	LoginType: 'email',
 							// });
-							res.redirect(
-								url.format({
-									pathname: 'http://9351eda07173.ngrok.io/',
-									query: {
-										accessToken: accessToken,
-									},
-								}),
-							);
+							// res.redirect(
+							// 	url.format({
+							// 		pathname: 'http://9351eda07173.ngrok.io/',
+							// 		query: {
+							// 			accessToken: accessToken,
+							// 		},
+							// 	}),
+							// );
 							// res.redirect('/?' + query);
-							// 	res
-							// 		.status(200).
-							// 		.write({ message: 'ok', data: { accessToken: accessToken } })
-							// 		.redirect('http://9351eda07173.ngrok.io/');
+							res.status(200).send({ message: 'ok', data: { accessToken: accessToken } });
 						} else {
 							//expired
 							res.status(403).json({
@@ -68,6 +65,7 @@ const emailAuthController = {
 						}
 					}
 				} catch (err) {
+					console.log(err);
 					res.status(401).json({
 						message: 'authorizationCode Error!',
 					});

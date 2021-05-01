@@ -77,7 +77,7 @@ const workspaceController = {
 				let task = await Workspaces.findOne({ where: { title: taskList[i].title } });
 				let id = task?.get('id') as number;
 				taskList[i].tasks.map((el: any, index: number) => {
-					const { title, description, start_date, end_date } = taskItem[el];
+					const { title, description, start_date, end_date, checkList } = taskItem[el];
 					bulkQueryTask.push(
 						Object.assign(
 							{},

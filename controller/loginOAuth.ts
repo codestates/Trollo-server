@@ -63,6 +63,7 @@ const oauthController = {
 	},
 	github: async (req: Request, res: Response) => {
 		//로그인 - OAuth 방식: github
+		console.log('💙github- ', req.body);
 		const githubLoginURL = 'https://github.com/login/oauth/access_token';
 		const githubInfoURL = 'https://api.github.com/user';
 		// authorization code를 이용해 access token을 발급받음
@@ -90,7 +91,7 @@ const oauthController = {
 						},
 					})
 					.then(result => {
-						console.log('result.data - ', result.data);
+						//console.log('result.data - ', result.data);
 						return result.data.login;
 					})
 					.catch(err => {
@@ -108,6 +109,7 @@ const oauthController = {
 					});
 				}
 				// access token과 loginType을 응답으로 보내줌
+				console.log('🧡response - ', accessToken);
 				res.status(200).json({
 					accessToken,
 					LoginType: 'github',
