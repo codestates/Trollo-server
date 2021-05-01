@@ -48,10 +48,11 @@ const oauthController = {
 					maxAge: 1000 * 60 * 60 * 24 * 7,
 					httpOnly: true,
 				});
-				// access token과 loginType을 응답으로 보내줌
+				// access token과 loginType, email을 응답으로 보내줌
 				res.status(200).json({
 					accessToken,
 					LoginType: 'google',
+					email: resInfo,
 				});
 			})
 			.catch(err => {
@@ -113,6 +114,7 @@ const oauthController = {
 				res.status(200).json({
 					accessToken,
 					LoginType: 'github',
+					email: `${resInfo}@github.com`,
 				});
 			})
 			.catch(err => {
