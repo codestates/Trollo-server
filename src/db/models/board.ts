@@ -14,8 +14,9 @@ import {
 import { sequelize } from './index';
 import { Users } from './user';
 interface BoardAttributes {
-	writer: string;
+	writer: string | undefined;
 	title: string;
+	user_id: number | undefined;
 }
 
 export class Boards extends Model<BoardAttributes> {
@@ -31,6 +32,7 @@ Boards.init(
 	{
 		writer: DataTypes.STRING,
 		title: DataTypes.STRING,
+		user_id: DataTypes.NUMBER,
 	},
 	{
 		sequelize,
