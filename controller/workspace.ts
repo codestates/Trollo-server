@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { Workspaces, WorkspaceAttributes } from '../src/db/models/workspace';
 import { Tasks, TaskAttributes } from '../src/db/models/task';
 import { Users } from '../src/db/models/user';
+import checkListModel from '../src/db/models/checkList';
+import { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 const workspaceController = {
 	get: async (req: Request, res: Response) => {
 		console.log('👻', req.body);
@@ -23,6 +26,7 @@ const workspaceController = {
 					.map(el => {
 						return el.get('id');
 					});
+				// console.log('🥵', taskArr);
 				res_taskList.push(Object.assign({}, { title: workspace[i].get('title'), tasks: taskArr }));
 			}
 			// 각 taskList id 에 맞는 taskItem을 조회해서 id만 tasks 배열에 담는다.
@@ -31,17 +35,37 @@ const workspaceController = {
 				[index: number]: any;
 			} = {};
 			// console.log(res_taskList);
-			tasks.map(el => {
-				res_taskItem[el.get('id') as number] = Object.assign(
-					{},
-					{
-						title: el.title,
-						description: el.desc,
-						start_date: el.start_date,
-						end_date: el.end_date,
-					},
-				);
-			});
+
+			for (let i = 0; i < tasks.length; i++) {
+				let id = tasks[i].get('id') as number;
+				console.log('🥺', id);
+				const checkList = await checkListModel.findOne({ tasksId: id });
+				console.log('🥵', checkList);
+				if (checkList) {
+					res_taskItem[id] = Object.assign(
+						{},
+						{
+							title: tasks[i].title,
+							description: tasks[i].desc,
+							start_date: tasks[i].start_date,
+							end_date: tasks[i].end_date,
+							checkList: JSON.parse(checkList.body),
+						},
+					);
+				} else {
+					res_taskItem[id] = Object.assign(
+						{},
+						{
+							title: tasks[i].title,
+							description: tasks[i].desc,
+							start_date: tasks[i].start_date,
+							end_date: tasks[i].end_date,
+							checkList: [],
+						},
+					);
+				}
+			}
+			console.log('😮', res_taskItem);
 
 			res.send({ taskList: res_taskList, taskItem: res_taskItem });
 		}
@@ -78,6 +102,20 @@ const workspaceController = {
 				let id = task?.get('id') as number;
 				taskList[i].tasks.map((el: any, index: number) => {
 					const { title, description, start_date, end_date, checkList } = taskItem[el];
+					const McheckList = new checkListModel({
+						tasksId: id,
+						body: JSON.stringify(checkList),
+					});
+					McheckList.save()
+						.then(result => {
+							console.log(result);
+						})
+						.catch(error => {
+							return res.status(500).json({
+								message: error.message,
+								error,
+							});
+						});
 					bulkQueryTask.push(
 						Object.assign(
 							{},
