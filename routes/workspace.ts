@@ -3,6 +3,7 @@ import { authChecker } from './../middleware/authChecker';
 import { workspaceController } from '../controller/workspace';
 import express from 'express';
 const workspaceRouter = express.Router();
+
 // 실제 요청 처리하기 전 access token 확인
 workspaceRouter.use('/workspace', authChecker);
 

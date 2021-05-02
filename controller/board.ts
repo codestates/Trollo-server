@@ -14,12 +14,6 @@ const boardController = {
 	boardDelete: (req: Request, res: Response) => {
 		// 게시글 삭제하기
 	},
-	commentAdd: (req: Request, res: Response) => {
-		// 댓글 추가하기
-	},
-	commentDelete: (req: Request, res: Response) => {
-		// 댓글 삭제하기
-	},
 };
 
 export { boardController };

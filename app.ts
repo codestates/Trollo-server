@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import './init/mongo';
 import 'dotenv/config';
-import devRouter from './routes/dev';
+//import devRouter from './routes/dev';
 import boardRouter from './routes/board';
 import userRouter from './routes/user';
 import workspaceRouter from './routes/workspace';
