@@ -2,6 +2,7 @@ import jwt, { VerifyErrors } from 'jsonwebtoken';
 import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
 import { accessTokenGenerator } from '../Auth/GenerateAccessToken';
+import { Users } from '../src/db/models/user';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -40,6 +41,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 										const email = decoded.email;
 										const newAccessToken = await accessTokenGenerator(id, email);
 										req.newAccessToken = newAccessToken;
+										req.user_id = id;
 										req.user_email = email;
 									}
 								},
@@ -92,7 +94,19 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 					console.log(err.message);
 					res.redirect(`${process.env.CLIENT_URL}/login`);
 				});
-			req.user_email = resInfo;
+			const userInfo = await Users.findOne({
+				where: {
+					email: resInfo,
+				},
+			});
+			if (userInfo !== null) {
+				console.log('find userInfo', userInfo);
+				req.user_email = resInfo;
+				req.user_id = userInfo.get('id') as number;
+			} else {
+				// 유저 정보를 찾을 수 없음 -> 인증 불가 -> 다시 로그인해야함
+				res.redirect(`${process.env.CLIENT_URL}/login`);
+			}
 		} else if (LoginType === 'github') {
 			// 로그인 방식 - github
 			// refresh token이 없음, 로그아웃 하기 전까지 access token 계속 사용 가능
@@ -114,11 +128,25 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 					console.log(err.message);
 					res.redirect(`${process.env.CLIENT_URL}/login`);
 				});
-			req.user_email = `${resInfo}@github.com`;
+			const email = `${resInfo}@github.com`;
+			const userInfo = await Users.findOne({
+				where: {
+					email,
+				},
+			});
+			if (userInfo !== null) {
+				console.log('find userInfo', userInfo);
+				req.user_email = email;
+				req.user_id = userInfo.get('id') as number;
+			} else {
+				// 유저 정보를 찾을 수 없음 -> 인증 불가 -> 다시 로그인해야함
+				res.redirect(`${process.env.CLIENT_URL}/login`);
+			}
 		}
 		// 실제 요청으로 넘어감
 		// req.user_email: 유저 이메일 정보 저장, 실제 요청에서 사용 가능
 		// 나중에 응답 보낼때 accessToken에 req.newAccessToken을 넣어주면 됨
+		console.log('💖authChecker ', LoginType, req.user_id, req.user_email, req.newAccessToken);
 		next();
 	} else {
 		// access token이 없을 때 -> 로그인 페이지로 돌아감
