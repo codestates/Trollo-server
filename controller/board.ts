@@ -11,8 +11,28 @@ const boardController = {
 			boardList,
 		});
 	},
-	boardOne: (req: Request, res: Response) => {
+	boardOne: async (req: Request, res: Response) => {
 		// 게시글 상세 내용 + 댓글 데이터 보내주기
+		console.log('💜boardOne ', req.params);
+		const board_id = Number(req.params.board_id);
+		const boardData = await Boards.findOne({
+			where: {
+				id: board_id,
+			},
+		});
+		if (boardData === null) {
+			res.status(403).json({
+				message: 'no board data Error!',
+			});
+		} else {
+			// board_id를 key로 가지는 칸반보드 데이터 불러오기
+			// board_id를 key로 가지는 댓글 데이터 불러오기
+			res.status(200).json({
+				...boardData, // 여기 좀더 고민
+				//content
+				//comment
+			});
+		}
 	},
 	boardAdd: async (req: Request, res: Response) => {
 		// 게시글 등록하기
