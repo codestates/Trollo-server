@@ -55,6 +55,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 						req.newAccessToken = accessToken;
 						// console.log('여기까지 도달했음');
 						req.user_email = decoded.email;
+						req.user_id = decoded.userId;
 						// res.locals.email = decoded.email;
 						// res.body.user_email = decoded.email;
 					}
