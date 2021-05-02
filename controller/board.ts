@@ -42,11 +42,12 @@ const boardController = {
 			const writer = req.user_email;
 			const user_id = req.user_id;
 			const newBoard = await Boards.create({
+				id: undefined,
 				title,
 				writer,
 				user_id,
 			});
-			const board_id = newBoard.id;
+			const board_id = newBoard.get('id');
 			// board_id를 key로 가지는 칸반보드 데이터 저장
 			// board_id를 key로 가지는 댓글 데이터 저장(빈파일? 생성)
 			res.status(200).json({

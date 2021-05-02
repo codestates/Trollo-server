@@ -102,7 +102,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 			if (userInfo !== null) {
 				console.log('find userInfo', userInfo);
 				req.user_email = resInfo;
-				req.user_id = userInfo.id;
+				req.user_id = userInfo.get('id') as number;
 			} else {
 				// 유저 정보를 찾을 수 없음 -> 인증 불가 -> 다시 로그인해야함
 				res.redirect(`${process.env.CLIENT_URL}/login`);
@@ -137,7 +137,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 			if (userInfo !== null) {
 				console.log('find userInfo', userInfo);
 				req.user_email = email;
-				req.user_id = userInfo.id;
+				req.user_id = userInfo.get('id') as number;
 			} else {
 				// 유저 정보를 찾을 수 없음 -> 인증 불가 -> 다시 로그인해야함
 				res.redirect(`${process.env.CLIENT_URL}/login`);
@@ -146,6 +146,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 		// 실제 요청으로 넘어감
 		// req.user_email: 유저 이메일 정보 저장, 실제 요청에서 사용 가능
 		// 나중에 응답 보낼때 accessToken에 req.newAccessToken을 넣어주면 됨
+		console.log('💖authChecker ', LoginType, req.user_id, req.user_email, req.newAccessToken);
 		next();
 	} else {
 		// access token이 없을 때 -> 로그인 페이지로 돌아감
