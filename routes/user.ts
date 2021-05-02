@@ -5,8 +5,10 @@ import { emailAuthController } from '../controller/emailauth';
 import { oauthController } from '../controller/loginOAuth';
 import { userController } from '../controller/user';
 const userRouter = express.Router();
+
 // 로그인
 userRouter.post('/login', userController.login);
+// 로그인 - nodemailer
 userRouter.post('/mail', emailController);
 userRouter.post('/emailauth', emailAuthController.authorizationCode);
 // 로그인 - OAuth 방식: google, github

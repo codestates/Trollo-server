@@ -14,10 +14,14 @@ import {
 import { sequelize } from './index';
 import { Users } from './user';
 interface BoardAttributes {
+	writer: string | undefined;
 	title: string;
+	user_id: number | undefined;
 }
 
 export class Boards extends Model<BoardAttributes> {
+	public readonly id!: number;
+	public writer!: string;
 	public title!: string;
 	static associations: {
 		boardBelongsToUser: Association<Boards, Users>;
@@ -26,7 +30,9 @@ export class Boards extends Model<BoardAttributes> {
 }
 Boards.init(
 	{
+		writer: DataTypes.STRING,
 		title: DataTypes.STRING,
+		user_id: DataTypes.NUMBER,
 	},
 	{
 		sequelize,
@@ -35,7 +41,7 @@ Boards.init(
 );
 
 Boards.belongsTo(Users, {
-	foreignKey: 'writer',
+	foreignKey: 'user_id',
 	targetKey: 'id',
 });
 
