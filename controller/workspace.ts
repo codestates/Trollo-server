@@ -82,17 +82,21 @@ const workspaceController = {
 		//checkList(이건배열) -> 내부는 {content, checked} 인 객체
 		//쿼리문에 필요한 한 레코즈 속성 : title: string ,user_id: number,index: number;
 		const user = await Users.findOne({ where: { email } });
+		console.log('-----', user);
 		if (user) {
 			const user_id = user.get('id') as number;
 			const tasks_id = await Tasks.findAll({ where: { user_id } });
-			//[...new Set(array)]
-			let taskIds = [
-				...new Set(
-					tasks_id.map(el => {
-						return el.get('tasklist_id');
-					}),
-				),
-			];
+			let taskIds: any[] = [];
+			if (tasks_id) {
+				//[...new Set(array)]
+				taskIds = [
+					...new Set(
+						tasks_id.map(el => {
+							return el.get('tasklist_id');
+						}),
+					),
+				];
+			}
 			if (user && taskList && taskItem) {
 				await Tasks.destroy({ where: { user_id } });
 				await Workspaces.destroy({ where: { user_id } });
