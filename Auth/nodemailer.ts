@@ -110,7 +110,7 @@ export const emailController = async (req: Request, res: Response) => {
                                     <div>
                                       <a href=${
 																				process.env.CLIENT_URL +
-																				'/?authorizationCode=' +
+																				'/login/?authorizationCode=' +
 																				AuthorizationCode +
 																				'&email=' +
 																				email
@@ -126,12 +126,12 @@ export const emailController = async (req: Request, res: Response) => {
                             <p style="                      color: #000;                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',                        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',                        'Droid Sans', 'Helvetica Neue', sans-serif;                      font-size: 14px;                      line-height: 24px;                    ">
                               <a href="${
 																process.env.CLIENT_URL +
-																'/?authorizationCode=' +
+																'/login/?authorizationCode=' +
 																AuthorizationCode +
 																'&email=' +
 																email
 															}" style="color: #067df7; text-decoration: none;" target="_blank" rel="noreferrer noopener">
-															${process.env.CLIENT_URL + '/?authorizationCode=' + AuthorizationCode + '&email=' + email}
+															${process.env.CLIENT_URL + '/login/?authorizationCode=' + AuthorizationCode + '&email=' + email}
                               </a>
                             </p>
                             <br>
