@@ -7,6 +7,7 @@ import { Users } from '../src/db/models/user';
 const oauthController = {
 	google: async (req: Request, res: Response) => {
 		//로그인 - OAuth 방식: google
+		console.log('💙google- ', req.body);
 		const googleLoginURL = 'https://accounts.google.com/o/oauth2/token';
 		const googleInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo';
 		// authorization code를 이용해 access token을 발급받음
@@ -49,6 +50,7 @@ const oauthController = {
 					httpOnly: true,
 				});
 				// access token과 loginType, email을 응답으로 보내줌
+				console.log('🧡response - ', accessToken);
 				res.status(200).json({
 					accessToken,
 					LoginType: 'google',

@@ -56,7 +56,11 @@ const emailAuthController = {
 							// 	}),
 							// );
 							// res.redirect('/?' + query);
-							res.status(200).send({ message: 'ok', data: { accessToken: accessToken } });
+							res.status(200).json({
+								accessToken,
+								email,
+								LoginType: 'email',
+							});
 						} else {
 							//expired
 							res.status(403).json({
