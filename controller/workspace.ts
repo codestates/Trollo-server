@@ -84,55 +84,71 @@ const workspaceController = {
 		const user = await Users.findOne({ where: { email } });
 		if (user) {
 			const user_id = user.get('id') as number;
-			await Tasks.destroy({ where: { user_id } });
-			await Workspaces.destroy({ where: { user_id } });
-		}
-		if (user && taskList && taskItem) {
-			const user_id = user.get('id') as number;
-			const bulkQueryWorkspace = [] as WorkspaceAttributes[];
-			const bulkQueryTask = [] as TaskAttributes[];
-			for (let i = 0; i < taskList.length; i++) {
-				bulkQueryWorkspace.push(Object.assign({}, { title: taskList[i].title, user_id, index: i }));
-			}
-			//테스크리스트에 보낼 벌크쿼리 완성
-			console.log(bulkQueryWorkspace);
-			const tempWorkspaceCheck = await Workspaces.bulkCreate(bulkQueryWorkspace);
-			console.log(tempWorkspaceCheck);
-			//쿼리문에 필요한 테스크 레코즈 속성 :
-			//title: str , checklist: str,start_date,end_date ,tasklist_id: num,index: num
+			const tasks_id = await Tasks.findAll({ where: { user_id } });
+			//[...new Set(array)]
+			let taskIds = [
+				...new Set(
+					tasks_id.map(el => {
+						return el.get('tasklist_id');
+					}),
+				),
+			];
+			if (user && taskList && taskItem) {
+				await Tasks.destroy({ where: { user_id } });
+				await Workspaces.destroy({ where: { user_id } });
+				for (let i = 0; i < taskIds.length; i++) {
+					console.log('🛵', taskIds[i]);
+					await checkListModel.deleteMany({ tasksId: taskIds[i] });
+				}
 
-			for (let i = 0; i < taskList.length; i++) {
-				let task = await Workspaces.findOne({ where: { title: taskList[i].title } });
-				let id = task?.get('id') as number;
-				taskList[i].tasks.map((el: any, index: number) => {
-					const { title, description, start_date, end_date, checkList } = taskItem[el];
-					const McheckList = new checkListModel({
-						tasksId: id,
-						body: JSON.stringify(checkList),
-					});
-					McheckList.save()
-						.then(result => {
-							console.log(result);
-						})
-						.catch(error => {
-							return res.status(500).json({
-								message: error.message,
-								error,
-							});
-						});
-					bulkQueryTask.push(
-						Object.assign(
-							{},
-							{ title, tasklist_id: id, index, start_date, end_date, desc: description, user_id },
-						),
+				// const user_id = user.get('id') as number;
+				const bulkQueryWorkspace = [] as WorkspaceAttributes[];
+				const bulkQueryTask = [] as TaskAttributes[];
+				for (let i = 0; i < taskList.length; i++) {
+					bulkQueryWorkspace.push(
+						Object.assign({}, { title: taskList[i].title, user_id, index: i }),
 					);
-				});
-			}
-			console.log(bulkQueryTask);
+				}
+				//테스크리스트에 보낼 벌크쿼리 완성
+				console.log(bulkQueryWorkspace);
+				const tempWorkspaceCheck = await Workspaces.bulkCreate(bulkQueryWorkspace);
+				console.log(tempWorkspaceCheck);
+				//쿼리문에 필요한 테스크 레코즈 속성 :
+				//title: str , checklist: str,start_date,end_date ,tasklist_id: num,index: num
 
-			const tempTaskCheck = await Tasks.bulkCreate(bulkQueryTask);
-			console.log(tempTaskCheck);
-			res.send('added workspace table;');
+				for (let i = 0; i < taskList.length; i++) {
+					let task = await Workspaces.findOne({ where: { title: taskList[i].title } });
+					let id = task?.get('id') as number;
+					taskList[i].tasks.map((el: any, index: number) => {
+						const { title, description, start_date, end_date, checkList } = taskItem[el];
+						const McheckList = new checkListModel({
+							tasksId: id,
+							body: JSON.stringify(checkList),
+						});
+						McheckList.save()
+							.then(result => {
+								console.log(result);
+							})
+							.catch(error => {
+								return res.status(500).json({
+									message: error.message,
+									error,
+								});
+							});
+						bulkQueryTask.push(
+							Object.assign(
+								{},
+								{ title, tasklist_id: id, index, start_date, end_date, desc: description, user_id },
+							),
+						);
+					});
+				}
+				console.log(bulkQueryTask);
+
+				const tempTaskCheck = await Tasks.bulkCreate(bulkQueryTask);
+				console.log(tempTaskCheck);
+				res.send('added workspace table;');
+			}
 		}
 	},
 };
