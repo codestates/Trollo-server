@@ -7,7 +7,7 @@ const workspaceRouter = express.Router();
 workspaceRouter.use('/workspace', authChecker);
 
 //workspace(칸반보드) 데이터 보내주기
-workspaceRouter.get('/workspace', workspaceController.get);
+workspaceRouter.post('/workspace/get', authChecker, workspaceController.get);
 
 // 생성, 수정, 삭제된 workspace(칸반보드) 데이터 저장하기
 workspaceRouter.post('/workspace', workspaceController.post);

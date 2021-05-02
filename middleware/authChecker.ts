@@ -6,9 +6,12 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const authChecker = async (req: Request, res: Response, next: NextFunction) => {
+	console.log('어스체커 실행중');
+	// console.log(req.headers);
 	if (req.headers.authorization) {
 		const accessToken = req.headers.authorization.split('Bearer ')[1];
-		const LoginType = req.headers.LoginType;
+		const LoginType = req.headers.logintype;
+		console.log(accessToken, LoginType);
 		if (LoginType === 'email') {
 			// 로그인 방식 - email
 			jwt.verify(
@@ -48,7 +51,10 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 					} else {
 						// access token 만료되지 않음
 						req.newAccessToken = accessToken;
+						// console.log('여기까지 도달했음');
 						req.user_email = decoded.email;
+						// res.locals.email = decoded.email;
+						// res.body.user_email = decoded.email;
 					}
 				},
 			);

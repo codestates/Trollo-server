@@ -2,13 +2,18 @@ import { Request, Response } from 'express';
 import { Workspaces, WorkspaceAttributes } from '../src/db/models/workspace';
 import { Tasks, TaskAttributes } from '../src/db/models/task';
 import { Users } from '../src/db/models/user';
+import checkListModel from '../src/db/models/checkList';
+import { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 const workspaceController = {
 	get: async (req: Request, res: Response) => {
-		console.log('👻', req.body);
+		// console.log(req.pro)
+
 		// workspace(칸반보드) 데이터 보내주기
 		// response에 {taskList , taskItem} 으로 내려줘야함.
 		//테스크리스트 모양만들기에 필요한 데이터들 : title,tasks:[](안에 taskid)
-		const user = await Users.findOne({ where: { email: req.body.email } });
+		const email = req.user_email;
+		const user = await Users.findOne({ where: { email: email } });
 		if (user) {
 			const user_id = user.get('id') as number;
 			const workspace = await Workspaces.findAll({ where: { user_id }, order: [['index', 'ASC']] });
@@ -23,6 +28,7 @@ const workspaceController = {
 					.map(el => {
 						return el.get('id');
 					});
+				// console.log('🥵', taskArr);
 				res_taskList.push(Object.assign({}, { title: workspace[i].get('title'), tasks: taskArr }));
 			}
 			// 각 taskList id 에 맞는 taskItem을 조회해서 id만 tasks 배열에 담는다.
@@ -31,24 +37,46 @@ const workspaceController = {
 				[index: number]: any;
 			} = {};
 			// console.log(res_taskList);
-			tasks.map(el => {
-				res_taskItem[el.get('id') as number] = Object.assign(
-					{},
-					{
-						title: el.title,
-						description: el.desc,
-						start_date: el.start_date,
-						end_date: el.end_date,
-					},
-				);
-			});
+
+			for (let i = 0; i < tasks.length; i++) {
+				let id = tasks[i].get('id') as number;
+				console.log('🥺', id);
+				const checkList = await checkListModel.findOne({ tasksId: id });
+				console.log('🥵', checkList);
+				if (checkList) {
+					res_taskItem[id] = Object.assign(
+						{},
+						{
+							title: tasks[i].title,
+							description: tasks[i].desc,
+							start_date: tasks[i].start_date,
+							end_date: tasks[i].end_date,
+							checkList: JSON.parse(checkList.body),
+						},
+					);
+				} else {
+					res_taskItem[id] = Object.assign(
+						{},
+						{
+							title: tasks[i].title,
+							description: tasks[i].desc,
+							start_date: tasks[i].start_date,
+							end_date: tasks[i].end_date,
+							checkList: [],
+						},
+					);
+				}
+			}
+			console.log('😮', res_taskItem);
 
 			res.send({ taskList: res_taskList, taskItem: res_taskItem });
 		}
 	},
 	post: async (req: Request, res: Response) => {
+		// console.log('👻dddd', res.locals.email);
 		// 생성, 수정, 삭제된 workspace(칸반보드) 데이터 저장하기
-		const { email, taskList, taskItem } = req.body;
+		const email = req.user_email;
+		const { taskList, taskItem } = req.body;
 		//테스크리스트 : [ {id,타이틀, 테스크스(배열= 테스크아이템에 매칭되는 키값이 들어있음)} , ... ]
 		//테스크아이템 : {테스크아이템키값:{고유id,title,desc,start_date,end_date,checkList(이건배열)} }
 		//checkList(이건배열) -> 내부는 {content, checked} 인 객체
@@ -78,6 +106,20 @@ const workspaceController = {
 				let id = task?.get('id') as number;
 				taskList[i].tasks.map((el: any, index: number) => {
 					const { title, description, start_date, end_date, checkList } = taskItem[el];
+					const McheckList = new checkListModel({
+						tasksId: id,
+						body: JSON.stringify(checkList),
+					});
+					McheckList.save()
+						.then(result => {
+							console.log(result);
+						})
+						.catch(error => {
+							return res.status(500).json({
+								message: error.message,
+								error,
+							});
+						});
 					bulkQueryTask.push(
 						Object.assign(
 							{},
