@@ -38,8 +38,20 @@ const boardController = {
 			});
 		}
 	},
-	boardDelete: (req: Request, res: Response) => {
+	boardDelete: async (req: Request, res: Response) => {
 		// 게시글 삭제하기
+		console.log('💜boardDelete ', req.params);
+		const board_id = Number(req.params.board_id);
+		await Boards.destroy({
+			where: {
+				id: board_id,
+			},
+		});
+		// board_id를 key로 가지는 칸반보드 데이터 삭제
+		// board_id를 key로 가지는 댓글 데이터 삭제
+		res.status(200).json({
+			message: `delete ${board_id} complete`,
+		});
 	},
 };
 
