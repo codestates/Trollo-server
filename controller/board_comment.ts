@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Boards } from '../src/db/models/board';
 import mongoose from 'mongoose';
 import commentModel from '../src/db/models/comment';
-
+import { commentDisplay } from './commentDisplay';
 // interface
 interface Comment extends mongoose.Document {
 	user_id: string;
@@ -19,22 +19,25 @@ const commentController = {
 		const user_id = req.user_id;
 		const user_email = req.user_email;
 		const board_id = Number(req.params.board_id);
-		const { comment_body } = req.body;
-
+		const { comment_body, parent_id } = req.body;
 		const comment = new commentModel({
 			board_id,
 			user_id,
 			user_email,
 			comment_body,
+			parent_id,
 		});
 		// new mongoose.Types.ObjectId 유니크값 생성기 같은 느낌이다. 아이디생성용
 		return comment
 			.save()
 			.then(async result => {
-				console.log(result);
-				const commentAll = await commentModel.find({ board_id });
+				//console.log(result);
+				const commentData = await commentModel.find({ board_id });
+				console.log('🤎', commentData);
+				const commentAll = commentDisplay(commentData);
 				return res.status(201).json({
 					commentAll,
+					//commentData,
 				});
 			})
 			.catch(error => {
