@@ -58,7 +58,9 @@ const commentController = {
 			.deleteOne()
 			.and([{ _id: comment_id }, { user_id }])
 			.then(async data => {
-				const commentAll = await commentModel.find({ board_id });
+				const commentData = await commentModel.find({ board_id });
+				console.log('🤎', commentData);
+				const commentAll = commentDisplay(commentData);
 				res.status(200).json({
 					commentAll,
 				});
