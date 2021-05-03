@@ -47,11 +47,13 @@ const commentController = {
 		// 댓글 삭제하기
 		console.log('💜commentDelete ', req.params);
 		const board_id = Number(req.params.board_id);
-		const comment_id = Number(req.params.comment_id);
+		const comment_id = String(req.params.comment_id);
 		const user_id = req.user_id;
 		const user_email = req.user_email;
+		console.log(user_id);
 		commentModel
-			.deleteOne({ $and: [{ user_id }, { id: comment_id }] })
+			.deleteOne()
+			.and([{ _id: comment_id }, { user_id }])
 			.then(async data => {
 				const commentAll = await commentModel.find({ board_id });
 				res.status(200).json({

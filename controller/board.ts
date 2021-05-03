@@ -33,13 +33,16 @@ const boardController = {
 			// board_id를 key로 가지는 칸반보드 데이터 불러오기
 			let foundContent = await contentModel.findOne({ board_id });
 			// board_id를 key로 가지는 댓글 데이터 불러오기
+			let foundComment = await commentModel.find({ board_id });
+
+			// 게시글 상세내용 응답으로 보내주기
 			if (foundContent) {
 				res.status(200).json({
 					writer: boardData.writer,
 					title: boardData.title,
 					createdAt: boardData.get('createdAt'),
 					content: JSON.parse(foundContent.body),
-					//comment
+					commentAll: foundComment,
 				});
 			} else {
 				res.status(404).json({

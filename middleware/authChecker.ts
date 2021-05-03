@@ -43,6 +43,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 										req.newAccessToken = newAccessToken;
 										req.user_id = id;
 										req.user_email = email;
+										res.send({ newAccessToken });
 									}
 								},
 							);
