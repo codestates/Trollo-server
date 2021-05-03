@@ -8,7 +8,7 @@ dotenv.config();
 
 export const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 	console.log('어스체커 실행중');
-	// console.log(req.headers);
+	console.log(req.headers);
 	if (req.headers.authorization) {
 		const accessToken = req.headers.authorization.split('Bearer ')[1];
 		const LoginType = req.headers.logintype;

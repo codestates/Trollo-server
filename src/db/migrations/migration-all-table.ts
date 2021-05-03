@@ -21,7 +21,7 @@ let migrationAllTable = async () => {
 		if (stderr) console.error('Std Err : ', stderr);
 	}
 	let migrationFiles: string[] = [];
-
+	console.log('migrationFiles!!!:', migrationFiles);
 	fs.readdir(path.join(__dirname, '/', 'create-table'), async (err, files) => {
 		if (err) console.log('err : ', err);
 		if (files) {
