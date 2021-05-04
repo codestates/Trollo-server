@@ -7,7 +7,7 @@ import { Users } from '../src/db/models/user';
 const oauthController = {
 	google: async (req: Request, res: Response) => {
 		//로그인 - OAuth 방식: google
-		console.log('💙google- ', req.body);
+		console.log('💙login: google- ', req.body);
 		const googleLoginURL = 'https://accounts.google.com/o/oauth2/token';
 		const googleInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo';
 		// authorization code를 이용해 access token을 발급받음
@@ -16,7 +16,7 @@ const oauthController = {
 				client_id: process.env.GOOGLE_CLIENT_ID,
 				client_secret: process.env.GOOGLE_CLIENT_SECRET,
 				code: req.body.authorizationCode,
-				redirect_uri: process.env.CLIENT_URL,
+				redirect_uri: `${process.env.CLIENT_URL}/login`,
 				grant_type: 'authorization_code',
 			})
 			.then(async result => {
@@ -50,7 +50,7 @@ const oauthController = {
 					httpOnly: true,
 				});
 				// access token과 loginType, email을 응답으로 보내줌
-				console.log('🧡response - ', accessToken);
+				console.log('💙google: at - ', accessToken, '\n💙google: rt - ', refreshToken);
 				res.status(200).json({
 					accessToken,
 					LoginType: 'google',
@@ -58,15 +58,15 @@ const oauthController = {
 				});
 			})
 			.catch(err => {
-				console.log(err.message);
+				console.log('💙google: ', err.message);
 				res.status(401).json({
-					message: 'authorizationCode Error!',
+					message: 'authorizationCode Error!' + err.message,
 				});
 			});
 	},
 	github: async (req: Request, res: Response) => {
 		//로그인 - OAuth 방식: github
-		console.log('💙github- ', req.body);
+		console.log('💙login: github- ', req.body);
 		const githubLoginURL = 'https://github.com/login/oauth/access_token';
 		const githubInfoURL = 'https://api.github.com/user';
 		// authorization code를 이용해 access token을 발급받음
@@ -93,10 +93,7 @@ const oauthController = {
 							authorization: `Bearer ${accessToken}`,
 						},
 					})
-					.then(result => {
-						//console.log('result.data - ', result.data);
-						return result.data.login;
-					})
+					.then(result => result.data.login)
 					.catch(err => {
 						console.log(err.message);
 					});
@@ -112,7 +109,7 @@ const oauthController = {
 					});
 				}
 				// access token과 loginType을 응답으로 보내줌
-				console.log('🧡response - ', accessToken);
+				console.log('💙github: at - ', accessToken);
 				res.status(200).json({
 					accessToken,
 					LoginType: 'github',
@@ -120,7 +117,7 @@ const oauthController = {
 				});
 			})
 			.catch(err => {
-				console.log(err.message);
+				console.log('💙github: ', err.message);
 				res.status(401).json({
 					message: 'authorizationCode Error!',
 				});
