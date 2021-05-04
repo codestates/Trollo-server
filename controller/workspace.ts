@@ -7,9 +7,8 @@ import { Mongoose } from 'mongoose';
 import mongoose from 'mongoose';
 const workspaceController = {
 	get: async (req: Request, res: Response) => {
-		// console.log(req.pro)
-
 		// workspace(칸반보드) 데이터 보내주기
+		console.log('🧡workspaceGet - workspace(칸반보드) 데이터 보기');
 		// response에 {taskList , taskItem} 으로 내려줘야함.
 		//테스크리스트 모양만들기에 필요한 데이터들 : title,tasks:[](안에 taskid)
 		const email = req.user_email;
@@ -73,8 +72,10 @@ const workspaceController = {
 		}
 	},
 	post: async (req: Request, res: Response) => {
-		// console.log('👻dddd', res.locals.email);
 		// 생성, 수정, 삭제된 workspace(칸반보드) 데이터 저장하기
+		console.log('🧡workspacePost - workspace(칸반보드) 데이터 저장');
+		// console.log('👻dddd', res.locals.email);
+
 		const email = req.user_email;
 		const { taskList, taskItem } = req.body;
 		//테스크리스트 : [ {id,타이틀, 테스크스(배열= 테스크아이템에 매칭되는 키값이 들어있음)} , ... ]
