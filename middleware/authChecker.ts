@@ -5,7 +5,12 @@ import { accessTokenGenerator } from '../Auth/GenerateAccessToken';
 import { Users } from '../src/db/models/user';
 import * as dotenv from 'dotenv';
 dotenv.config();
-
+interface Itoken {
+	userId: number;
+	email: string;
+	iat: number;
+	exp: number;
+}
 export const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 	console.log('🔒authChecker 실행합니다 - headers: ', req.headers);
 	if (req.headers.authorization) {
@@ -13,42 +18,46 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 		const LoginType = req.headers.logintype;
 		if (LoginType === 'email') {
 			// 로그인 방식 - email
-			jwt.verify(
-				accessToken,
-				process.env.ACCESS_SECRET as string,
-				(err: VerifyErrors | null, decoded: any | null) => {
-					if (err) {
-						// access toekn : 기간 만료
-						const refreshToken = req.cookies.refreshToken;
-						// if (refreshToken) {
-						// 	// refresh token : 존재 -> 정상인지 확인해야함
-						// 	jwt.verify(
-						// 		refreshToken,
-						// 		process.env.REFRESH_SECRET as string,
-						// 		async (err: VerifyErrors | null, decoded: any | undefined) => {
-						// 			if (err) {
-						// 				// refresh token : 정상적이지 않음 -> 로그인으로 돌아감
-						// 				res.redirect(`${process.env.CLIENT_URL}/login`);
-						// 			} else {
-						// 				// 새로운 access token을 발급 받음
-						// 				const id = decoded.userId;
-						// 				const email = decoded.email;
-						// 				const newAccessToken = await accessTokenGenerator(id, email);
-						// 				req.newAccessToken = newAccessToken;
-						// 			}
-						// 		},
-						// 	);
-						// } else {
-						// 	// refresh token : 없음
-						// 	res.redirect(`${process.env.CLIENT_URL}/login`);
-						// }
-					} else {
-						// access token : 만료되지 않음
-						req.user_email = decoded.email;
-						req.user_id = decoded.userId;
-					}
-				},
-			);
+			try {
+				const decoded = (await jwt.verify(
+					accessToken,
+					process.env.ACCESS_SECRET as string,
+				)) as Itoken;
+				console.log(decoded);
+				// if (decoded가 err일 조건) {
+				// access toekn : 기간 만료
+				// const refreshToken = req.cookies.refreshToken;
+				// if (refreshToken) {
+				// 	// refresh token : 존재 -> 정상인지 확인해야함
+				// 	jwt.verify(
+				// 		refreshToken,
+				// 		process.env.REFRESH_SECRET as string,
+				// 		async (err: VerifyErrors | null, decoded: any | undefined) => {
+				// 			if (err) {
+				// 				// refresh token : 정상적이지 않음 -> 로그인으로 돌아감
+				// 				res.redirect(`${process.env.CLIENT_URL}/login`);
+				// 			} else {
+				// 				// 새로운 access token을 발급 받음
+				// 				const id = decoded.userId;
+				// 				const email = decoded.email;
+				// 				const newAccessToken = await accessTokenGenerator(id, email);
+				// 				req.newAccessToken = newAccessToken;
+				// 			}
+				// 		},
+				// 	);
+				// } else {
+				// 	// refresh token : 없음
+				// 	res.redirect(`${process.env.CLIENT_URL}/login`);
+				// }
+				// } else{
+				// access token : 만료되지 않음
+				if (typeof decoded !== 'string') {
+					req.user_email = decoded.email;
+					req.user_id = decoded.userId;
+				}
+			} catch (err) {
+				//err handling
+			}
 		} else if (LoginType === 'google') {
 			// 로그인 방식 - google
 			// refresh token을 이용하여 새로운 access token을 발급받음

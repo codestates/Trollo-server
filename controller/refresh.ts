@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import { Users } from '../src/db/models/user';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
-import { accessTokenGenerator } from 'Auth/GenerateAccessToken';
+import { accessTokenGenerator } from '../Auth/GenerateAccessToken';
 
 export const refreshController = async (req: Request, res: Response) => {
 	//LoginType에 대한 분기처리
