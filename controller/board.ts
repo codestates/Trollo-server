@@ -10,7 +10,7 @@ import commentModel from '../src/db/models/comment';
 const boardController = {
 	boardAll: async (req: Request, res: Response) => {
 		// 게시판 글 목록 데이터 보내주기
-		console.log('💜boardAll');
+		console.log('💜boardAll - 게시판 글 목록 보기');
 		let boardList = await Boards.findAll();
 		res.status(200).json({
 			boardList,
@@ -18,7 +18,7 @@ const boardController = {
 	},
 	boardOne: async (req: Request, res: Response) => {
 		// 게시글 상세 내용 + 댓글 데이터 보내주기
-		console.log('💜boardOne ', req.params);
+		console.log('💜boardOne - ', req.params);
 		const board_id = Number(req.params.board_id);
 		const boardData = await Boards.findOne({
 			where: {
@@ -26,15 +26,16 @@ const boardController = {
 			},
 		});
 		if (boardData === null) {
+			console.log('💜boardOne - ERROR// no board data ', board_id);
 			res.status(403).json({
 				message: 'no board data Error!',
 			});
 		} else {
+			console.log('💜boardOne - board data ', board_id);
 			// board_id를 key로 가지는 칸반보드 데이터 불러오기
 			let foundContent = await contentModel.findOne({ board_id });
 			// board_id를 key로 가지는 댓글 데이터 불러오기
 			let foundComment = await commentModel.find({ board_id });
-
 			// 게시글 상세내용 응답으로 보내주기
 			if (foundContent) {
 				res.status(200).json({
@@ -45,6 +46,7 @@ const boardController = {
 					commentAll: foundComment,
 				});
 			} else {
+				console.log('💜boardOne - ERROR// no content ', board_id);
 				res.status(404).json({
 					message: 'no content Error!',
 				});
@@ -53,12 +55,11 @@ const boardController = {
 	},
 	boardAdd: async (req: Request, res: Response) => {
 		// 게시글 등록하기
-		console.log('💜boardAdd ', req.body, req.user_email, req.user_id);
+		console.log('💜boardAdd - ', req.body, req.user_email, req.user_id);
 		const title = req.body.title;
 		if (title !== '') {
 			const writer = req.user_email;
 			const user_id = req.user_id;
-			console.log('chekcheakdjfkldaf - ', writer, user_id);
 			const newBoard = await Boards.create({
 				id: undefined,
 				title,
@@ -67,7 +68,7 @@ const boardController = {
 			});
 			const board_id = newBoard.get('id');
 			// board_id를 key로 가지는 칸반보드 데이터 저장
-			//----------------------------------------- 아래는 유저가 소유한 칸반보드를 데이터화해주는 과정
+			// 유저가 소유한 칸반보드를 데이터화해주는 과정
 			const email = req.user_email; // 유저 정보 어스체커에서 받아옴
 			const user = await Users.findOne({ where: { email: email } }); // 유저정보 조회 유저객체
 			if (user) {
@@ -76,9 +77,7 @@ const boardController = {
 					where: { user_id },
 					order: [['index', 'ASC']],
 				});
-				// console.log(workspace);
 				const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
-				// console.log(tasks);
 				const res_taskList = [];
 				for (let i = 0; i < workspace.length; i++) {
 					const id = workspace[i].get('id');
@@ -87,22 +86,16 @@ const boardController = {
 						.map(el => {
 							return el.get('id');
 						});
-					// console.log('🥵', taskArr);
 					res_taskList.push(
 						Object.assign({}, { title: workspace[i].get('title'), tasks: taskArr }),
 					);
 				}
-
 				const res_taskItem: {
 					[index: number]: any;
 				} = {};
-				// console.log(res_taskList);
-
 				for (let i = 0; i < tasks.length; i++) {
 					let id = tasks[i].get('id') as number;
-					console.log('🥺', id);
 					const checkList = await checkListModel.findOne({ tasksId: id });
-					console.log('🥵', checkList);
 					if (checkList) {
 						res_taskItem[id] = Object.assign(
 							{},
@@ -133,23 +126,24 @@ const boardController = {
 				});
 				Mboard_data.save()
 					.then(result => {
-						console.log(result);
+						//console.log(result);
 					})
-					.catch(error => {
-						return res.status(500).json({
-							message: error.message,
-							error,
+					.catch(err => {
+						console.log('💜boardAdd - ERROR// ', err.message);
+						res.status(500).json({
+							message: err.message,
 						});
 					});
-				// res.send({ Mboard_data });
 			}
-			// board_id를 key로 가지는 댓글 데이터 저장(빈파일? 생성)
+			// board_id를 key로 가지는 댓글 데이터 저장(빈파일? 생성) -> 필요없음
+			// 새로 생성된 게시판 글 목록 데이터 보내줌
 			let boardList = await Boards.findAll();
 			res.status(200).json({
 				new_board_id: board_id,
 				boardList,
 			});
 		} else {
+			console.log('💜boardAdd - ERROR// no input title ', title);
 			res.status(400).json({
 				message: 'no input title Error!',
 			});
@@ -157,7 +151,7 @@ const boardController = {
 	},
 	boardDelete: async (req: Request, res: Response) => {
 		// 게시글 삭제하기
-		console.log('💜boardDelete ', req.params);
+		console.log('💜boardDelete - ', req.params);
 		const board_id = Number(req.params.board_id);
 		await Boards.destroy({
 			where: {
@@ -165,7 +159,10 @@ const boardController = {
 			},
 		});
 		// board_id를 key로 가지는 칸반보드 데이터 삭제
+		contentModel.deleteOne({ board_id });
 		// board_id를 key로 가지는 댓글 데이터 삭제
+		commentModel.deleteMany({ board_id });
+		// 삭제되었다는 메시지 보내기
 		res.status(200).json({
 			message: `delete ${board_id} complete`,
 		});
