@@ -3,8 +3,7 @@ import { Workspaces, WorkspaceAttributes } from '../src/db/models/workspace';
 import { Tasks, TaskAttributes } from '../src/db/models/task';
 import { Users } from '../src/db/models/user';
 import checkListModel from '../src/db/models/checkList';
-import { Mongoose } from 'mongoose';
-import mongoose from 'mongoose';
+
 const workspaceController = {
 	get: async (req: Request, res: Response) => {
 		// workspace(칸반보드) 데이터 보내주기
@@ -25,7 +24,12 @@ const workspaceController = {
 					.map(el => {
 						return el.get('id');
 					});
-				res_taskList.push(Object.assign({}, { title: workspace[i].get('title'), tasks: taskArr }));
+				res_taskList.push(
+					Object.assign(
+						{},
+						{ title: workspace[i].get('title'), tasks: taskArr, color: workspace[i].get('color') },
+					),
+				);
 			}
 			// 각 taskList id 에 맞는 taskItem을 조회해서 id만 tasks 배열에 담는다.
 			const res_taskItem: {
@@ -99,7 +103,10 @@ const workspaceController = {
 				const bulkQueryTask = [] as TaskAttributes[];
 				for (let i = 0; i < taskList.length; i++) {
 					bulkQueryWorkspace.push(
-						Object.assign({}, { title: taskList[i].title, user_id, index: i }),
+						Object.assign(
+							{},
+							{ title: taskList[i].title, user_id, index: i, color: taskList[i].color },
+						),
 					);
 				}
 				//테스크리스트에 보낼 벌크쿼리 완성
