@@ -40,21 +40,21 @@ const boardController = {
 			let commentAll = commentDisplay(foundComment);
 			foundComment;
 			// 게시글 상세내용 응답으로 보내주기
-			// if (foundContent) {
-			res.status(200).json({
-				id: board_id,
-				writer: boardData.writer,
-				title: boardData.title,
-				createdAt: boardData.get('createdAt'),
-				content: 'test', //JSON.parse(foundContent.body),
-				commentAll,
-			});
-			// } else {
-			// 	console.log('💜boardOne - ERROR// no content ', board_id);
-			// 	res.status(404).json({
-			// 		message: 'no content Error!',
-			// 	});
-			// }
+			if (foundContent) {
+				res.status(200).json({
+					id: board_id,
+					writer: boardData.writer,
+					title: boardData.title,
+					createdAt: boardData.get('createdAt'),
+					content: JSON.parse(foundContent.body),
+					commentAll,
+				});
+			} else {
+				console.log('💜boardOne - ERROR// no content ', board_id);
+				res.status(404).json({
+					message: 'no content Error!',
+				});
+			}
 		}
 	},
 	boardAdd: async (req: Request, res: Response) => {
