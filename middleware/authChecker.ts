@@ -13,7 +13,7 @@ interface Itoken {
 }
 
 export const authChecker = async (req: Request, res: Response, next: NextFunction) => {
-	console.log(`🔒authChecker 실행합니다 - headers:\n${req.headers} \n`);
+	console.log('🔒authChecker 실행합니다 - headers:\n', req.headers, '\n-------------\n');
 	if (req.headers.authorization) {
 		const accessToken = req.headers.authorization.split('Bearer ')[1];
 		const LoginType = req.headers.logintype;
@@ -104,7 +104,7 @@ export const authChecker = async (req: Request, res: Response, next: NextFunctio
 		console.log('🔒authChecker result - ', LoginType, req.userId, req.userEmail, '\n');
 		if (req.userId !== undefined && req.userEmail !== undefined) {
 			// 실제 요청으로 넘어감
-			console.log('🔒go next function!!\n');
+			console.log('🔒go next function!!\n\n');
 			next();
 		} else {
 			// 에러 발생 -> 로그인 페이지로 돌아감

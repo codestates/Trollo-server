@@ -37,21 +37,22 @@ const boardController = {
 			// board_id를 key로 가지는 댓글 데이터 불러오기
 			let foundComment = await commentModel.find({ board_id });
 			// 게시글 상세내용 응답으로 보내주기
-			if (foundContent) {
-				res.status(200).json({
-					id: board_id,
-					writer: boardData.writer,
-					title: boardData.title,
-					createdAt: boardData.get('createdAt'),
-					content: JSON.parse(foundContent.body),
-					commentAll: foundComment,
-				});
-			} else {
-				console.log('💜boardOne - ERROR// no content ', board_id);
-				res.status(404).json({
-					message: 'no content Error!',
-				});
-			}
+			console.log('💜boardOne - ', foundComment, '\n------------------------------\n');
+			// if (foundContent) {
+			res.status(200).json({
+				id: board_id,
+				writer: boardData.writer,
+				title: boardData.title,
+				createdAt: boardData.get('createdAt'),
+				content: 'test', //JSON.parse(foundContent.body),
+				commentAll: foundComment,
+			});
+			// } else {
+			// 	console.log('💜boardOne - ERROR// no content ', board_id);
+			// 	res.status(404).json({
+			// 		message: 'no content Error!',
+			// 	});
+			// }
 		}
 	},
 	boardAdd: async (req: Request, res: Response) => {
