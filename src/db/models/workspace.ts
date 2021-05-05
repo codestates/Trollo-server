@@ -18,6 +18,7 @@ import { Tasks } from './task';
 
 export interface WorkspaceAttributes {
 	title: string;
+	color: string;
 	user_id: number;
 	index: number;
 }
@@ -26,6 +27,7 @@ export class Workspaces extends Model<WorkspaceAttributes> {
 	public title!: string;
 	public user_id!: number;
 	public index!: number;
+	public color!: string;
 	static associations: {
 		// WorkspaceBelongsToTask: Association<Workspaces, Tasks>;
 		// define association here
@@ -34,6 +36,7 @@ export class Workspaces extends Model<WorkspaceAttributes> {
 Workspaces.init(
 	{
 		title: DataTypes.STRING,
+		color: DataTypes.STRING,
 		user_id: DataTypes.INTEGER,
 		index: DataTypes.INTEGER,
 	},
