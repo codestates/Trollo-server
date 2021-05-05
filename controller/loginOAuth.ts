@@ -108,6 +108,11 @@ const oauthController = {
 						email: `${resInfo}@github.com`,
 					});
 				}
+				// cookie에 refresh token 저장
+				res.cookie('refreshToken', accessToken, {
+					maxAge: 1000 * 60 * 60 * 24 * 7,
+					httpOnly: true,
+				});
 				// access token과 loginType을 응답으로 보내줌
 				console.log('💙github: at - ', accessToken);
 				res.status(200).json({
