@@ -3,6 +3,7 @@ import { Workspaces, WorkspaceAttributes } from '../src/db/models/workspace';
 import { Tasks, TaskAttributes } from '../src/db/models/task';
 import { Users } from '../src/db/models/user';
 import checkListModel from '../src/db/models/checkList';
+import { doesNotMatch } from 'node:assert';
 
 const workspaceController = {
 	get: async (req: Request, res: Response) => {
@@ -140,26 +141,22 @@ const workspaceController = {
 						const el = taskList[i].tasks[j];
 						const index = j;
 						const { title, description, start_date, end_date, checkList } = taskItem[el];
-						const McheckList = new checkListModel({
-							tasksId: id,
-							body: JSON.stringify(checkList),
-						});
-						await McheckList.save();
-						// .then(result => {
-						// 	console.log('mongoDB 체크리스트 저장완료');
-						// })
-						// .catch(error => {
-						// 	console.log('mongoDB 체크리스트 저장실패');
-						// });
-						bulkQueryTask.push(
+
+						const taskCreateDone = await Tasks.create(
 							Object.assign(
 								{},
 								{ title, tasklist_id: id, index, start_date, end_date, desc: description, user_id },
 							),
 						);
+						const taskId = taskCreateDone.get('id');
+						const McheckList = new checkListModel({
+							tasksId: taskId,
+							body: JSON.stringify(checkList),
+						});
+						await McheckList.save();
 					}
 				}
-				const tempTaskCheck = await Tasks.bulkCreate(bulkQueryTask);
+				// const tempTaskCheck = await Tasks.bulkCreate(bulkQueryTask);
 				res.send('added workspace table;');
 			}
 		}
