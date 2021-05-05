@@ -11,9 +11,9 @@ const workspaceController = {
 		// response에 {taskList , taskItem} 으로 내려줘야함.
 		//테스크리스트 모양만들기에 필요한 데이터들 : title,tasks:[](안에 taskid)
 		const email = req.userEmail;
-		const user = await Users.findOne({ where: { email: email } });
-		if (user) {
-			const user_id = user.get('id') as number;
+		const userId = req.userId;
+		if (userId) {
+			const user_id = userId;
 			const workspace = await Workspaces.findAll({ where: { user_id }, order: [['index', 'ASC']] });
 			const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
 			const res_taskList = [];
@@ -62,23 +62,22 @@ const workspaceController = {
 					);
 				}
 			}
+			console.log(res_taskList, res_taskItem);
 			res.send({ taskList: res_taskList, taskItem: res_taskItem });
 		}
 	},
 	post: async (req: Request, res: Response) => {
 		// 생성, 수정, 삭제된 workspace(칸반보드) 데이터 저장하기
 		console.log('🧡workspacePost - workspace(칸반보드) 데이터 저장');
-		// console.log('👻dddd', res.locals.email);
-
 		const email = req.userEmail;
 		const { taskList, taskItem } = req.body;
 		//테스크리스트 : [ {id,타이틀, 테스크스(배열= 테스크아이템에 매칭되는 키값이 들어있음)} , ... ]
 		//테스크아이템 : {테스크아이템키값:{고유id,title,desc,start_date,end_date,checkList(이건배열)} }
 		//checkList(이건배열) -> 내부는 {content, checked} 인 객체
 		//쿼리문에 필요한 한 레코즈 속성 : title: string ,user_id: number,index: number;
-		const user = await Users.findOne({ where: { email } });
-		if (user) {
-			const user_id = user.get('id') as number;
+		const userId = req.userId;
+		if (userId) {
+			const user_id = userId;
 			const tasks_id = await Tasks.findAll({ where: { user_id } });
 			let taskIds: any[] = [];
 			if (tasks_id) {
@@ -91,7 +90,7 @@ const workspaceController = {
 					),
 				];
 			}
-			if (user && taskList && taskItem) {
+			if (userId && taskList && taskItem) {
 				await Tasks.destroy({ where: { user_id } });
 				await Workspaces.destroy({ where: { user_id } });
 				for (let i = 0; i < taskIds.length; i++) {
