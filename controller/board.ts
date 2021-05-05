@@ -37,7 +37,7 @@ const boardController = {
 			let foundContent = await contentModel.findOne({ board_id });
 			// board_id를 key로 가지는 댓글 데이터 불러오기
 			let foundComment = await commentModel.find({ board_id });
-			let commentAll = commentDisplay;
+			let commentAll = commentDisplay(foundComment);
 			foundComment;
 			// 게시글 상세내용 응답으로 보내주기
 			// if (foundContent) {
