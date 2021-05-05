@@ -44,7 +44,7 @@ export const commentDisplay = (commentData: any): newComment[] => {
 			console.log(idx, 'push commentAll');
 			commentAll.push(nowComment);
 		} else {
-			console.log('recursive!');
+			console.log(idx, 'recursive!');
 			findParent(commentAll, nowComment);
 		}
 	}

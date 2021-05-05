@@ -6,6 +6,7 @@ import { Tasks } from '../src/db/models/task';
 import checkListModel from '../src/db/models/checkList';
 import contentModel from '../src/db/models/content';
 import commentModel from '../src/db/models/comment';
+import { commentDisplay } from './commentDisplay';
 
 const boardController = {
 	boardAll: async (req: Request, res: Response) => {
@@ -36,8 +37,9 @@ const boardController = {
 			let foundContent = await contentModel.findOne({ board_id });
 			// board_id를 key로 가지는 댓글 데이터 불러오기
 			let foundComment = await commentModel.find({ board_id });
+			let commentAll = commentDisplay;
+			foundComment;
 			// 게시글 상세내용 응답으로 보내주기
-			console.log('💜boardOne - ', foundComment, '\n------------------------------\n');
 			// if (foundContent) {
 			res.status(200).json({
 				id: board_id,
@@ -45,7 +47,7 @@ const boardController = {
 				title: boardData.title,
 				createdAt: boardData.get('createdAt'),
 				content: 'test', //JSON.parse(foundContent.body),
-				commentAll: foundComment,
+				commentAll,
 			});
 			// } else {
 			// 	console.log('💜boardOne - ERROR// no content ', board_id);
