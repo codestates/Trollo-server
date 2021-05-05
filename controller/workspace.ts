@@ -16,9 +16,7 @@ const workspaceController = {
 		if (user) {
 			const user_id = user.get('id') as number;
 			const workspace = await Workspaces.findAll({ where: { user_id }, order: [['index', 'ASC']] });
-			// console.log(workspace);
 			const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
-			// console.log(tasks);
 			const res_taskList = [];
 			for (let i = 0; i < workspace.length; i++) {
 				const id = workspace[i].get('id');
@@ -27,21 +25,15 @@ const workspaceController = {
 					.map(el => {
 						return el.get('id');
 					});
-				// console.log('🥵', taskArr);
 				res_taskList.push(Object.assign({}, { title: workspace[i].get('title'), tasks: taskArr }));
 			}
 			// 각 taskList id 에 맞는 taskItem을 조회해서 id만 tasks 배열에 담는다.
-
 			const res_taskItem: {
 				[index: number]: any;
 			} = {};
-			// console.log(res_taskList);
-
 			for (let i = 0; i < tasks.length; i++) {
 				let id = tasks[i].get('id') as number;
-				console.log('🥺', id);
 				const checkList = await checkListModel.findOne({ tasksId: id });
-				console.log('🥵', checkList);
 				if (checkList) {
 					res_taskItem[id] = Object.assign(
 						{},
@@ -66,8 +58,6 @@ const workspaceController = {
 					);
 				}
 			}
-			console.log('😮', res_taskItem);
-
 			res.send({ taskList: res_taskList, taskItem: res_taskItem });
 		}
 	},
@@ -83,7 +73,6 @@ const workspaceController = {
 		//checkList(이건배열) -> 내부는 {content, checked} 인 객체
 		//쿼리문에 필요한 한 레코즈 속성 : title: string ,user_id: number,index: number;
 		const user = await Users.findOne({ where: { email } });
-		console.log('-----', user);
 		if (user) {
 			const user_id = user.get('id') as number;
 			const tasks_id = await Tasks.findAll({ where: { user_id } });
@@ -102,7 +91,6 @@ const workspaceController = {
 				await Tasks.destroy({ where: { user_id } });
 				await Workspaces.destroy({ where: { user_id } });
 				for (let i = 0; i < taskIds.length; i++) {
-					console.log('🛵', taskIds[i]);
 					await checkListModel.deleteMany({ tasksId: taskIds[i] });
 				}
 
@@ -115,9 +103,7 @@ const workspaceController = {
 					);
 				}
 				//테스크리스트에 보낼 벌크쿼리 완성
-				console.log(bulkQueryWorkspace);
 				const tempWorkspaceCheck = await Workspaces.bulkCreate(bulkQueryWorkspace);
-				console.log(tempWorkspaceCheck);
 				//쿼리문에 필요한 테스크 레코즈 속성 :
 				//title: str , checklist: str,start_date,end_date ,tasklist_id: num,index: num
 
@@ -132,7 +118,7 @@ const workspaceController = {
 						});
 						McheckList.save()
 							.then(result => {
-								console.log(result);
+								console.log('mongoDB 체크리스트 저장완료');
 							})
 							.catch(error => {
 								return res.status(500).json({
@@ -148,10 +134,7 @@ const workspaceController = {
 						);
 					});
 				}
-				console.log(bulkQueryTask);
-
 				const tempTaskCheck = await Tasks.bulkCreate(bulkQueryTask);
-				console.log(tempTaskCheck);
 				res.send('added workspace table;');
 			}
 		}
