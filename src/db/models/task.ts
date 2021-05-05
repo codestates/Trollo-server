@@ -17,8 +17,8 @@ import { Workspaces } from './workspace';
 export interface TaskAttributes {
 	title: string;
 	checklist?: string;
-	start_date: Date;
-	end_date: Date;
+	start_date: string;
+	end_date: string;
 	tasklist_id: number;
 	index: number;
 	desc: string;
@@ -28,8 +28,8 @@ export interface TaskAttributes {
 export class Tasks extends Model<TaskAttributes> {
 	public title!: string;
 	public checklist!: string;
-	public start_date!: Date;
-	public end_date!: Date;
+	public start_date!: string;
+	public end_date!: string;
 	public tasklist_id!: number;
 	public index!: number;
 	public desc!: string;
@@ -43,8 +43,8 @@ Tasks.init(
 	{
 		title: DataTypes.STRING,
 		checklist: DataTypes.STRING,
-		start_date: DataTypes.DATE,
-		end_date: DataTypes.DATE,
+		start_date: DataTypes.STRING,
+		end_date: DataTypes.STRING,
 		tasklist_id: DataTypes.INTEGER,
 		index: DataTypes.INTEGER,
 		desc: DataTypes.STRING,
