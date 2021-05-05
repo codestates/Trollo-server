@@ -128,10 +128,7 @@ const workspaceController = {
 								console.log('mongoDB 체크리스트 저장완료');
 							})
 							.catch(error => {
-								return res.status(500).json({
-									message: error.message,
-									error,
-								});
+								console.log('mongoDB 체크리스트 저장실패');
 							});
 						bulkQueryTask.push(
 							Object.assign(
