@@ -14,8 +14,8 @@ const commentController = {
 	commentAdd: (req: Request, res: Response) => {
 		// 댓글 추가하기
 		console.log('💚commentAdd - ', req.params, req.body);
-		const user_id = req.user_id;
-		const user_email = req.user_email;
+		const user_id = req.userId;
+		const user_email = req.userEmail;
 		const board_id = Number(req.params.board_id);
 		const { comment_body, parent_id } = req.body;
 		const comment = new commentModel({
@@ -46,7 +46,7 @@ const commentController = {
 		console.log('💚commentDelete - ', req.params);
 		const board_id = Number(req.params.board_id);
 		const comment_id = String(req.params.comment_id);
-		const user_id = req.user_id;
+		const user_id = req.userId;
 		commentModel
 			.deleteOne()
 			.and([{ _id: comment_id }, { user_id }])

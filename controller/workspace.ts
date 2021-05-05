@@ -11,7 +11,7 @@ const workspaceController = {
 		console.log('🧡workspaceGet - workspace(칸반보드) 데이터 보기');
 		// response에 {taskList , taskItem} 으로 내려줘야함.
 		//테스크리스트 모양만들기에 필요한 데이터들 : title,tasks:[](안에 taskid)
-		const email = req.user_email;
+		const email = req.userEmail;
 		const user = await Users.findOne({ where: { email: email } });
 		if (user) {
 			const user_id = user.get('id') as number;
@@ -76,7 +76,7 @@ const workspaceController = {
 		console.log('🧡workspacePost - workspace(칸반보드) 데이터 저장');
 		// console.log('👻dddd', res.locals.email);
 
-		const email = req.user_email;
+		const email = req.userEmail;
 		const { taskList, taskItem } = req.body;
 		//테스크리스트 : [ {id,타이틀, 테스크스(배열= 테스크아이템에 매칭되는 키값이 들어있음)} , ... ]
 		//테스크아이템 : {테스크아이템키값:{고유id,title,desc,start_date,end_date,checkList(이건배열)} }

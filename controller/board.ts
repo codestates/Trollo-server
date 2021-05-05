@@ -39,6 +39,7 @@ const boardController = {
 			// 게시글 상세내용 응답으로 보내주기
 			if (foundContent) {
 				res.status(200).json({
+					id: board_id,
 					writer: boardData.writer,
 					title: boardData.title,
 					createdAt: boardData.get('createdAt'),
@@ -55,11 +56,11 @@ const boardController = {
 	},
 	boardAdd: async (req: Request, res: Response) => {
 		// 게시글 등록하기
-		console.log('💜boardAdd - ', req.body, req.user_email, req.user_id);
+		console.log('💜boardAdd - ', req.body, req.userEmail, req.userId);
 		const title = req.body.title;
 		if (title !== '') {
-			const writer = req.user_email;
-			const user_id = req.user_id;
+			const writer = req.userEmail;
+			const user_id = req.userId;
 			const newBoard = await Boards.create({
 				id: undefined,
 				title,
@@ -69,7 +70,7 @@ const boardController = {
 			const board_id = newBoard.get('id');
 			// board_id를 key로 가지는 칸반보드 데이터 저장
 			// 유저가 소유한 칸반보드를 데이터화해주는 과정
-			const email = req.user_email; // 유저 정보 어스체커에서 받아옴
+			const email = req.userEmail; // 유저 정보 어스체커에서 받아옴
 			const user = await Users.findOne({ where: { email: email } }); // 유저정보 조회 유저객체
 			if (user) {
 				const user_id = user.get('id') as number; // 유저객체에서 유저의 등록된 고유 id 받아옴
