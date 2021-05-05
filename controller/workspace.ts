@@ -17,7 +17,10 @@ const workspaceController = {
 			const user_id = userId;
 			const workspace = await Workspaces.findAll({ where: { user_id }, order: [['index', 'ASC']] });
 			const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
-			const res_taskList = [{ title: 'example', color: '#DDD', tasks: [] as Array<Tasks> }];
+			const res_taskList = [];
+			if (!workspace) {
+				res_taskList.push({ title: 'example', color: '#DDD', tasks: [] as Array<Tasks> });
+			}
 			for (let i = 0; i < workspace.length; i++) {
 				const id = workspace[i].get('id');
 				const taskArr: any = tasks
