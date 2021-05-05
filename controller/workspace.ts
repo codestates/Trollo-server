@@ -18,6 +18,7 @@ const workspaceController = {
 			const workspace = await Workspaces.findAll({ where: { user_id }, order: [['index', 'ASC']] });
 			const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
 			const res_taskList = [];
+			console.log('워크스페이스스스스스ㅡ스스스ㅡ스', workspace);
 			if (!workspace) {
 				res_taskList.push({ title: 'example', color: '#DDD', tasks: [] as Array<Tasks> });
 			}
