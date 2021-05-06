@@ -91,7 +91,14 @@ const boardController = {
 							return el.get('id');
 						});
 					res_taskList.push(
-						Object.assign({}, { title: workspace[i].get('title'), tasks: taskArr }),
+						Object.assign(
+							{},
+							{
+								title: workspace[i].get('title'),
+								tasks: taskArr,
+								color: workspace[i].get('color'),
+							},
+						),
 					);
 				}
 				const res_taskItem: {
