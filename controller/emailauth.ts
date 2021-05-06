@@ -43,6 +43,7 @@ const emailAuthController = {
 								// secure: true,
 								// sameOrigin: 'none',
 							});
+							console.log('쿠키삽입함');
 							// access token과 loginType을 응답으로 보내줌
 							res.status(200).json({
 								accessToken,

@@ -29,11 +29,22 @@ const corsOption = {
 	origin: true,
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
+	// preflightContinue: true,
 };
+app.use((req, res, next) => {
+	next();
+}, cors(corsOption));
+app.options(
+	'*',
+	(req, res, next) => {
+		next();
+	},
+	cors(corsOption),
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.json());
 app.use(cors(corsOption));
+app.use(express.json());
 app.use('/', userRouter);
 app.use('/', boardRouter);
 app.use('/', workspaceRouter);
