@@ -13,14 +13,6 @@ export async function accessTokenGenerator(id: number, email: string) {
 			// exp: Math.floor(Date.now() / 1000) + 60 * 5, // 5분 테스트용
 		},
 		process.env.ACCESS_SECRET,
-		// (err: Error | null, encoded: string | undefined) => {
-		// 	if (err) {
-		// 		console.log(err);
-		// 		return new Error('Not generation AccessToken');
-		// 	}
-		// 	console.log('at', encoded);
-		// 	token = encoded;
-		// },
 	);
 	console.log('uat', token);
 	return token;

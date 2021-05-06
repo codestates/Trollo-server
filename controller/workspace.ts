@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { Workspaces, WorkspaceAttributes } from '../src/db/models/workspace';
 import { Tasks, TaskAttributes } from '../src/db/models/task';
-import { Users } from '../src/db/models/user';
 import checkListModel from '../src/db/models/checkList';
-import { doesNotMatch } from 'node:assert';
 
 const workspaceController = {
 	get: async (req: Request, res: Response) => {
@@ -32,7 +30,11 @@ const workspaceController = {
 				res_taskList.push(
 					Object.assign(
 						{},
-						{ title: workspace[i].get('title'), tasks: taskArr, color: workspace[i].get('color') },
+						{
+							title: workspace[i].get('title'),
+							tasks: taskArr,
+							color: workspace[i].get('color'),
+						},
 					),
 				);
 			}
@@ -86,7 +88,6 @@ const workspaceController = {
 			const tasks_id = await Tasks.findAll({ where: { user_id } });
 			let taskIds: any[] = [];
 			if (tasks_id) {
-				//[...new Set(array)]
 				taskIds = [
 					...new Set(
 						tasks_id.map(el => {
@@ -101,8 +102,6 @@ const workspaceController = {
 				for (let i = 0; i < taskIds.length; i++) {
 					await checkListModel.deleteMany({ tasksId: taskIds[i] });
 				}
-
-				// const user_id = user.get('id') as number;
 				const bulkQueryWorkspace = [] as WorkspaceAttributes[];
 				const bulkQueryTask = [] as TaskAttributes[];
 				for (let i = 0; i < taskList.length; i++) {
@@ -121,26 +120,7 @@ const workspaceController = {
 				for (let i = 0; i < taskList.length; i++) {
 					let task = await Workspaces.findOne({ where: { title: taskList[i].title } });
 					let id = task?.get('id') as number;
-					// taskList[i].tasks.map((el: any, index: number) => {
-					// 	const { title, description, start_date, end_date, checkList } = taskItem[el];
-					// 	const McheckList = new checkListModel({
-					// 		tasksId: id,
-					// 		body: JSON.stringify(checkList),
-					// 	});
-					// 	await McheckList.save()
-					// 		// .then(result => {
-					// 		// 	console.log('mongoDB 체크리스트 저장완료');
-					// 		// })
-					// 		// .catch(error => {
-					// 		// 	console.log('mongoDB 체크리스트 저장실패');
-					// 		// });
-					// 	bulkQueryTask.push(
-					// 		Object.assign(
-					// 			{},
-					// 			{ title, tasklist_id: id, index, start_date, end_date, desc: description, user_id },
-					// 		),
-					// 	);
-					// });
+
 					for (let j = 0; j < taskList[i].tasks.length; j++) {
 						const el = taskList[i].tasks[j];
 						const index = j;
@@ -160,8 +140,9 @@ const workspaceController = {
 						await McheckList.save();
 					}
 				}
-				// const tempTaskCheck = await Tasks.bulkCreate(bulkQueryTask);
-				res.send('added workspace table;');
+				res.json({
+					message: 'added workspace table;',
+				});
 			}
 		}
 	},

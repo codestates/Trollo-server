@@ -2,11 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import './init/mongo';
 import 'dotenv/config';
-// import devRouter from './routes/dev';
 import boardRouter from './routes/board';
 import userRouter from './routes/user';
 import workspaceRouter from './routes/workspace';
 const cookieParser = require('cookie-parser');
+
 class App {
 	public application: express.Application;
 
@@ -48,7 +48,6 @@ app.use(express.json());
 app.use('/', userRouter);
 app.use('/', boardRouter);
 app.use('/', workspaceRouter);
-// app.use('/', devRouter); // 테스트용으로 바로 넘어감, 배포 전 삭제해야함!
 app.listen(4000, () => {
 	console.log('Server listening on port 4000');
 });

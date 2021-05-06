@@ -1,4 +1,3 @@
-import app from '../app';
 import { authChecker } from './../middleware/authChecker';
 import { workspaceController } from '../controller/workspace';
 import express from 'express';

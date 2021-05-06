@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+
 type NODE_ENV = {
 	[index: string]: any; // 어쩔수없는 any부분
 };
