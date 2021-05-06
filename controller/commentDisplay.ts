@@ -38,22 +38,19 @@ export const commentDisplay = (commentData: any): newComment[] => {
 	let commentAll: newComment[] = [];
 	console.log(commentData, commentData.length);
 	for (let idx = 0; idx < commentData.length; idx++) {
-		// 1. 형태 변경
+		// 형태 변경
 		let nowComment: newComment = { ...commentData[idx]['_doc'], children: [] };
 		if (nowComment.parent_id === null) {
-			console.log(idx, 'push commentAll');
 			commentAll.push(nowComment);
 		} else {
-			console.log(idx, 'recursive!');
 			findParent(commentAll, nowComment);
 		}
 	}
+
 	function findParent(cmtAll: newComment[], cmt: any) {
 		for (let idx = 0; idx < cmtAll.length; idx++) {
 			// 멈추는 조건: parent를 찾음!!!!
-			//console.log('check', typeof cmt.parent_id, typeof cmtAll[idx]['_id']);
 			if (cmt.parent_id === String(cmtAll[idx]['_id'])) {
-				//console.log(idx, cmt.parent_id);
 				cmtAll[idx].children.push(cmt);
 				return true;
 			} else if (cmtAll[idx].children.length > 0) {
@@ -72,6 +69,5 @@ export const commentDisplay = (commentData: any): newComment[] => {
 		// 3. 해당 parent_id 의 children에 1번을 push 한다
 		// 3-1. 재귀로 commentAll을 돌면서 해당 parent_id를 찾는다
 	}
-	//console.log('💝', commentAll);
 	return commentAll;
 };

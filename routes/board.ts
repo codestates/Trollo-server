@@ -1,4 +1,3 @@
-import app from '../app';
 import { authChecker } from './../middleware/authChecker';
 import { boardController } from '../controller/board';
 import { commentController } from '../controller/board_comment';
@@ -6,7 +5,6 @@ import express from 'express';
 const boardRouter = express.Router();
 
 // authChecker - 실제 요청 처리하기 전 access token 확인
-//boardRouter.use('/board', authChecker);
 
 // 게시판 글 목록 데이터 보내주기
 boardRouter.get('/board', authChecker, boardController.boardAll);
