@@ -49,10 +49,10 @@ const EmailValidationCheck = (email: string) => {
 			case 'kakao.com':
 				return true;
 			default:
-				return new Error('Not supported Email domain');
+				return false;
 		}
 	} else {
-		return new Error('Not email type');
+		return false;
 	}
 };
 

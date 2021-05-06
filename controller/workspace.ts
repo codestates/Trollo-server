@@ -11,66 +11,74 @@ const workspaceController = {
 		//테스크리스트 모양만들기에 필요한 데이터들 : title,tasks:[](안에 taskid)
 		const email = req.userEmail;
 		const userId = req.userId;
-		if (userId) {
-			const user_id = userId;
-			const workspace = await Workspaces.findAll({ where: { user_id }, order: [['index', 'ASC']] });
-			const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
-			const res_taskList = [];
-			console.log('워크스페이스스스스스ㅡ스스스ㅡ스', workspace);
-			if (workspace.length === 0) {
-				res_taskList.push({ title: 'example', color: '#DDD', tasks: [] as Array<Tasks> });
-			}
-			for (let i = 0; i < workspace.length; i++) {
-				const id = workspace[i].get('id');
-				const taskArr: any = tasks
-					.filter(el => el.tasklist_id === id)
-					.map(el => {
-						return el.get('id');
-					});
-				res_taskList.push(
-					Object.assign(
-						{},
-						{
-							title: workspace[i].get('title'),
-							tasks: taskArr,
-							color: workspace[i].get('color'),
-						},
-					),
-				);
-			}
-			// 각 taskList id 에 맞는 taskItem을 조회해서 id만 tasks 배열에 담는다.
-			const res_taskItem: {
-				[index: number]: any;
-			} = {};
-			for (let i = 0; i < tasks.length; i++) {
-				let id = tasks[i].get('id') as number;
-				const checkList = await checkListModel.findOne({ tasksId: id });
-				if (checkList) {
-					res_taskItem[id] = Object.assign(
-						{},
-						{
-							title: tasks[i].title,
-							description: tasks[i].desc,
-							start_date: tasks[i].start_date,
-							end_date: tasks[i].end_date,
-							checkList: JSON.parse(checkList.body),
-						},
-					);
-				} else {
-					res_taskItem[id] = Object.assign(
-						{},
-						{
-							title: tasks[i].title,
-							description: tasks[i].desc,
-							start_date: tasks[i].start_date,
-							end_date: tasks[i].end_date,
-							checkList: [],
-						},
+		try {
+			if (userId) {
+				const user_id = userId;
+				const workspace = await Workspaces.findAll({
+					where: { user_id },
+					order: [['index', 'ASC']],
+				});
+				const tasks = await Tasks.findAll({ where: { user_id }, order: [['index', 'ASC']] });
+				const res_taskList = [];
+				console.log('워크스페이스스스스스ㅡ스스스ㅡ스', workspace);
+				if (workspace.length === 0) {
+					res_taskList.push({ title: 'example', color: '#DDD', tasks: [] as Array<Tasks> });
+				}
+				for (let i = 0; i < workspace.length; i++) {
+					const id = workspace[i].get('id');
+					const taskArr: any = tasks
+						.filter(el => el.tasklist_id === id)
+						.map(el => {
+							return el.get('id');
+						});
+					res_taskList.push(
+						Object.assign(
+							{},
+							{
+								title: workspace[i].get('title'),
+								tasks: taskArr,
+								color: workspace[i].get('color'),
+							},
+						),
 					);
 				}
+				// 각 taskList id 에 맞는 taskItem을 조회해서 id만 tasks 배열에 담는다.
+				const res_taskItem: {
+					[index: number]: any;
+				} = {};
+				for (let i = 0; i < tasks.length; i++) {
+					let id = tasks[i].get('id') as number;
+					const checkList = await checkListModel.findOne({ tasksId: id });
+					if (checkList) {
+						res_taskItem[id] = Object.assign(
+							{},
+							{
+								title: tasks[i].title,
+								description: tasks[i].desc,
+								start_date: tasks[i].start_date,
+								end_date: tasks[i].end_date,
+								checkList: JSON.parse(checkList.body),
+							},
+						);
+					} else {
+						res_taskItem[id] = Object.assign(
+							{},
+							{
+								title: tasks[i].title,
+								description: tasks[i].desc,
+								start_date: tasks[i].start_date,
+								end_date: tasks[i].end_date,
+								checkList: [],
+							},
+						);
+					}
+				}
+				console.log(res_taskList, res_taskItem);
+				res.send({ taskList: res_taskList, taskItem: res_taskItem });
 			}
-			console.log(res_taskList, res_taskItem);
-			res.send({ taskList: res_taskList, taskItem: res_taskItem });
+		} catch (err) {
+			console.log(err);
+			res.json({ message: err });
 		}
 	},
 	post: async (req: Request, res: Response) => {
@@ -83,67 +91,80 @@ const workspaceController = {
 		//checkList(이건배열) -> 내부는 {content, checked} 인 객체
 		//쿼리문에 필요한 한 레코즈 속성 : title: string ,user_id: number,index: number;
 		const userId = req.userId;
-		if (userId) {
-			const user_id = userId;
-			const tasks_id = await Tasks.findAll({ where: { user_id } });
-			let taskIds: any[] = [];
-			if (tasks_id) {
-				taskIds = [
-					...new Set(
-						tasks_id.map(el => {
-							return el.get('tasklist_id');
-						}),
-					),
-				];
-			}
-			if (userId && taskList && taskItem) {
-				await Tasks.destroy({ where: { user_id } });
-				await Workspaces.destroy({ where: { user_id } });
-				for (let i = 0; i < taskIds.length; i++) {
-					await checkListModel.deleteMany({ tasksId: taskIds[i] });
-				}
-				const bulkQueryWorkspace = [] as WorkspaceAttributes[];
-				const bulkQueryTask = [] as TaskAttributes[];
-				for (let i = 0; i < taskList.length; i++) {
-					bulkQueryWorkspace.push(
-						Object.assign(
-							{},
-							{ title: taskList[i].title, user_id, index: i, color: taskList[i].color },
+		try {
+			if (userId) {
+				const user_id = userId;
+				const tasks_id = await Tasks.findAll({ where: { user_id } });
+				let taskIds: any[] = [];
+				if (tasks_id) {
+					taskIds = [
+						...new Set(
+							tasks_id.map(el => {
+								return el.get('tasklist_id');
+							}),
 						),
-					);
+					];
 				}
-				//테스크리스트에 보낼 벌크쿼리 완성
-				const tempWorkspaceCheck = await Workspaces.bulkCreate(bulkQueryWorkspace);
-				//쿼리문에 필요한 테스크 레코즈 속성 :
-				//title: str , checklist: str,start_date,end_date ,tasklist_id: num,index: num
-
-				for (let i = 0; i < taskList.length; i++) {
-					let task = await Workspaces.findOne({ where: { title: taskList[i].title } });
-					let id = task?.get('id') as number;
-
-					for (let j = 0; j < taskList[i].tasks.length; j++) {
-						const el = taskList[i].tasks[j];
-						const index = j;
-						const { title, description, start_date, end_date, checkList } = taskItem[el];
-
-						const taskCreateDone = await Tasks.create(
+				if (userId && taskList && taskItem) {
+					await Tasks.destroy({ where: { user_id } });
+					await Workspaces.destroy({ where: { user_id } });
+					for (let i = 0; i < taskIds.length; i++) {
+						await checkListModel.deleteMany({ tasksId: taskIds[i] });
+					}
+					const bulkQueryWorkspace = [] as WorkspaceAttributes[];
+					const bulkQueryTask = [] as TaskAttributes[];
+					for (let i = 0; i < taskList.length; i++) {
+						bulkQueryWorkspace.push(
 							Object.assign(
 								{},
-								{ title, tasklist_id: id, index, start_date, end_date, desc: description, user_id },
+								{ title: taskList[i].title, user_id, index: i, color: taskList[i].color },
 							),
 						);
-						const taskId = taskCreateDone.get('id');
-						const McheckList = new checkListModel({
-							tasksId: taskId,
-							body: JSON.stringify(checkList),
-						});
-						await McheckList.save();
 					}
+					//테스크리스트에 보낼 벌크쿼리 완성
+					const tempWorkspaceCheck = await Workspaces.bulkCreate(bulkQueryWorkspace);
+					//쿼리문에 필요한 테스크 레코즈 속성 :
+					//title: str , checklist: str,start_date,end_date ,tasklist_id: num,index: num
+
+					for (let i = 0; i < taskList.length; i++) {
+						let task = await Workspaces.findOne({ where: { title: taskList[i].title } });
+						let id = task?.get('id') as number;
+
+						for (let j = 0; j < taskList[i].tasks.length; j++) {
+							const el = taskList[i].tasks[j];
+							const index = j;
+							const { title, description, start_date, end_date, checkList } = taskItem[el];
+
+							const taskCreateDone = await Tasks.create(
+								Object.assign(
+									{},
+									{
+										title,
+										tasklist_id: id,
+										index,
+										start_date,
+										end_date,
+										desc: description,
+										user_id,
+									},
+								),
+							);
+							const taskId = taskCreateDone.get('id');
+							const McheckList = new checkListModel({
+								tasksId: taskId,
+								body: JSON.stringify(checkList),
+							});
+							await McheckList.save();
+						}
+					}
+					res.json({
+						message: 'added workspace table;',
+					});
 				}
-				res.json({
-					message: 'added workspace table;',
-				});
 			}
+		} catch (err) {
+			console.log(err);
+			res.json({ message: err });
 		}
 	},
 };
