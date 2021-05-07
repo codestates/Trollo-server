@@ -28,41 +28,26 @@
 
 <br/>
 
-# 🧑‍💻 시연
-
-### 로그인
-#### 1. email 로그인
-![Trollo_emaillogin](https://user-images.githubusercontent.com/77570843/117352040-70eb1680-aee9-11eb-89b5-6539e4f8f8fc.gif)
-#### 2. google 로그인
-![Trollo_google](https://user-images.githubusercontent.com/77570843/117352056-76e0f780-aee9-11eb-81b6-cbb223015b77.gif)
-#### 3. github 로그인
-![Trollo_git](https://user-images.githubusercontent.com/77570843/117352048-747e9d80-aee9-11eb-9c6e-5c25bb5005e0.gif)
----
+# 🧑‍💻 시연(일부)
+전체 시연영상은 wiki에서 보실 수 있습니다!
 
 ### 칸반보드
-
-#### 1. 칸반보드 drag and drop
+#### 칸반보드 drag and drop
 ![Trollo_workspace_drag](https://user-images.githubusercontent.com/77570843/117354030-d6d89d80-aeeb-11eb-82dd-b1b2ce0a2142.gif)
-#### 2. 칸반보드 add & delete
-![Trollo_workspace_add](https://user-images.githubusercontent.com/77570843/117352175-a132b500-aee9-11eb-8962-82a0b4cdf7b6.gif)
-#### 3. 칸반보드 detail(Task 상세 설정)
+#### 칸반보드 detail(Task 상세 설정)
 ![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/77570843/117364107-7734bf00-aef8-11eb-9eda-67b21cee693b.gif)
----
 
 ### 게시판
-
-#### 1. 게시글 등록
+#### 게시글 등록
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/77570843/117361689-5323ae80-aef5-11eb-8f7e-f810d2778cef.gif)
-#### 2. 게시글 보기
-![ezgif com-gif-maker (6)](https://user-images.githubusercontent.com/77570843/117364039-64ba8580-aef8-11eb-986b-2cac61ac0698.gif)
-#### 3. 게시글 삭제
-![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/77570843/117363778-01305800-aef8-11eb-8361-8bcc6901b8c2.gif)
-#### 4. 댓글 등록 / 삭제
-![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/77570843/117363550-b0b8fa80-aef7-11eb-864b-1282de754dfd.gif)
 
 <br/>
 
 # 🌟 팀 소개 [廓利精神]
+### 廓利精神(곽이정신)
+'세상을 널리 이롭게 만들자라는 정신'으로 살자는 의미로 만들어진 팀명으로   
+우연히 우리 팀 멤버들의 성과 일치했기에 더욱 의미있는 팀 이름이 되었습니다🤗  
+<br/>
 |이름|담당|
 |:---:|:---:|
 |곽은욱|FRONT-END|
@@ -78,4 +63,4 @@
 
 [📚  Trollo Wiki](https://github.com/codestates/Trollo-client/wiki)
 
-[🔐  Trollo Client Repository](https://github.com/codestates/Trollo-client)
+[🔐  Trollo Server Repository](https://github.com/codestates/Trollo-server)
