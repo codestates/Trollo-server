@@ -63,4 +63,4 @@
 
 [📚  Trollo Wiki](https://github.com/codestates/Trollo-client/wiki)
 
-[🔐  Trollo Server Repository](https://github.com/codestates/Trollo-server)
+[🔐  Trollo Client Repository](https://github.com/codestates/Trollo-client)
