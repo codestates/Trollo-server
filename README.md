@@ -15,13 +15,13 @@
 
 <br/>
 
-# 🛠 사용 Stack
+# 🛠 Tech Stack
 
 ![스크린샷 2021-05-06 오후 9 56 45](https://user-images.githubusercontent.com/77570843/117301812-f9e85a80-aeb5-11eb-95f2-a3a7c3572f8c.png)
 
 <br/>
 
-# 🚗 Architecture
+# 🚗 Flow Chart
 
 ### 사용자 유저 관점
 ![117291881-7d03b380-aeaa-11eb-9be4-8cf89b4a9f50 (1)](https://user-images.githubusercontent.com/77570843/117356792-1d7bc700-aeef-11eb-837f-ceada8c82e9c.jpg)
@@ -31,15 +31,18 @@
 # 🧑‍💻 시연(일부)
 전체 시연영상은 wiki에서 보실 수 있습니다!
 
-### 칸반보드
-#### 칸반보드 drag and drop
-![Trollo_workspace_drag](https://user-images.githubusercontent.com/77570843/117354030-d6d89d80-aeeb-11eb-82dd-b1b2ce0a2142.gif)
-#### 칸반보드 detail(Task 상세 설정)
-![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/77570843/117364107-7734bf00-aef8-11eb-9eda-67b21cee693b.gif)
-
-### 게시판
-#### 게시글 등록
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/77570843/117361689-5323ae80-aef5-11eb-8f7e-f810d2778cef.gif)
+<details>
+<summary>칸반보드 drag and drop</summary>     
+  <img src="https://user-images.githubusercontent.com/77570843/117354030-d6d89d80-aeeb-11eb-82dd-b1b2ce0a2142.gif">
+</details>
+<details>
+<summary>칸반보드 detail(Task 상세 설정)</summary>     
+  <img src="https://user-images.githubusercontent.com/77570843/117364107-7734bf00-aef8-11eb-9eda-67b21cee693b.gif">
+</details>
+<details>
+<summary>게시글 등록</summary>     
+  <img src="https://user-images.githubusercontent.com/77570843/117361689-5323ae80-aef5-11eb-8f7e-f810d2778cef.gif">
+</details>
 
 <br/>
 
@@ -47,19 +50,19 @@
 ### 廓利精神(곽이정신)
 '세상을 널리 이롭게 만들자라는 정신'으로 살자는 의미로 만들어진 팀명으로   
 우연히 우리 팀 멤버들의 성과 일치했기에 더욱 의미있는 팀 이름이 되었습니다🤗  
+
 <br/>
-|이름|담당|
-|:---:|:---:|
-|곽은욱|FRONT-END|
-|이우성|FRONT-END|
-|정송이|BACK-END|
-|신승길|BACK-END|
+
+| 역할 |  이름  |   담당    | Github                                                                                                                                                                      |
+| :--: | :----: | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 팀원 | 곽은욱 | FRONT-END | <a href="https://github.com/Woogie-94" target="_blank"><img src="https://img.shields.io/badge/Woogie_94-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a>       |
+| 팀장 | 이우성 | FRONT-END | <a href="https://github.com/useonglee" target="_blank"><img src="https://img.shields.io/badge/useonglee-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a>       |
+| 팀원 | 정송이 | BACK-END  | <a href="https://github.com/lovelysi0113" target="_blank"><img src="https://img.shields.io/badge/lovelysi0113-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a> |
+| 팀원 | 신승길 | BACK-END  | <a href="https://github.com/gatsukichi" target="_blank"><img src="https://img.shields.io/badge/gatsukichi-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a>     |
 
 <br/>
 
 # 🌸 More Info
-
-[🖥  배포 사이트](https://trollo.site)
 
 [📚  Trollo Wiki](https://github.com/codestates/Trollo-client/wiki)
 
